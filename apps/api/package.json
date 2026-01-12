@@ -1,0 +1,14 @@
+{
+  "name": "@personal-os/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "supabase functions serve",
+    "deploy": "supabase functions deploy",
+    "type-check": "echo 'Edge Functions use Deno - type checking skipped in Node environment'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.3.3"
+  }
+}
