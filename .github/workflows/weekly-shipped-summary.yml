@@ -11,16 +11,16 @@ jobs:
   send-summary:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch PRs and commits from all repos
+      - name: Fetch data and generate per-repo summaries
         id: fetch-data
         env:
           GH_PAT_PERSONAL: ${{ secrets.GH_PAT_PERSONAL }}
           PAT_FRACTAL: ${{ secrets.PAT_FRACTAL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         uses: actions/github-script@v7
         with:
           script: |
             // === CONFIGURE YOUR REPOS HERE ===
-            // Each repo specifies which PAT env var to use
             const repos = [
               { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard', tokenEnv: 'GH_PAT_PERSONAL' },
               { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews', tokenEnv: 'PAT_FRACTAL' },
@@ -29,6 +29,7 @@ jobs:
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const since = sevenDaysAgo.toISOString();
+            const dateRange = `${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}`;
 
             async function fetchGitHub(url, token) {
               const response = await fetch(url, {
@@ -44,8 +45,40 @@ jobs:
               return response.json();
             }
 
-            let allPrText = '';
-            let allCommitText = '';
+            async function generateSummary(repoName, prList, commitList) {
+              const prompt = `You are writing a brief weekly update summary for the "${repoName}" project.
+
+            PRs merged this week:
+            ${prList || 'None'}
+
+            Commits this week:
+            ${commitList || 'None'}
+
+            Write a concise 2-3 sentence summary focusing on what was accomplished and its impact. Be specific about features/fixes. If nothing shipped, say "No updates this week." Keep it professional but friendly.`;
+
+              try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.ANTHROPIC_API_KEY,
+                    'anthropic-version': '2023-06-01'
+                  },
+                  body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 200,
+                    messages: [{ role: 'user', content: prompt }]
+                  })
+                });
+
+                const data = await response.json();
+                return data.content?.[0]?.text || 'Unable to generate summary.';
+              } catch (error) {
+                console.log(`Error generating summary: ${error.message}`);
+                return 'Unable to generate summary.';
+              }
+            }
+
             let detailHtml = '';
             let totalPRs = 0;
             let totalCommits = 0;
@@ -80,26 +113,29 @@ jobs:
                 totalCommits += directCommits.length;
 
                 // Build text for AI summary
-                if (mergedPRs.length > 0 || directCommits.length > 0) {
-                  allPrText += `\n${name}:\n`;
-                  if (mergedPRs.length > 0) {
-                    allPrText += mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n') + '\n';
-                  }
-                  allCommitText += `\n${name}:\n`;
-                  if (directCommits.length > 0) {
-                    allCommitText += directCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n') + '\n';
-                  }
-                }
+                const prText = mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
+                const commitText = directCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n');
+
+                // Generate AI summary for this repo
+                const summary = await generateSummary(name, prText, commitText);
 
                 // Build HTML for this repo
-                detailHtml += `<h2>${name}</h2>`;
-                detailHtml += `<p style="color: #666; margin-top: -10px;"><a href="https://github.com/${owner}/${repo}">${owner}/${repo}</a></p>`;
+                detailHtml += `<h2 style="margin-bottom: 5px;">${name}</h2>`;
+                detailHtml += `<p style="color: #666; margin-top: 0;"><a href="https://github.com/${owner}/${repo}">${owner}/${repo}</a></p>`;
+
+                // AI Summary for this repo
+                detailHtml += `<div style="background: #f8f9fa; padding: 12px 16px; border-left: 4px solid #4a90d9; margin: 16px 0;">`;
+                detailHtml += `<p style="margin: 0; line-height: 1.5;">${summary}</p>`;
+                detailHtml += `</div>`;
 
                 if (mergedPRs.length === 0 && directCommits.length === 0) {
                   detailHtml += '<p style="color: #999;">No activity this week.</p>';
                 } else {
+                  // Collapsible details
+                  detailHtml += `<details style="margin-top: 12px;"><summary style="cursor: pointer; color: #666;">View details (${mergedPRs.length} PRs, ${directCommits.length} commits)</summary>`;
+
                   if (mergedPRs.length > 0) {
-                    detailHtml += '<h3>Pull Requests</h3><ul>';
+                    detailHtml += '<h4 style="margin: 12px 0 8px 0;">Pull Requests</h4><ul style="margin: 0;">';
                     for (const pr of mergedPRs) {
                       detailHtml += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
                     }
@@ -107,7 +143,7 @@ jobs:
                   }
 
                   if (directCommits.length > 0) {
-                    detailHtml += '<h3>Commits</h3><ul>';
+                    detailHtml += '<h4 style="margin: 12px 0 8px 0;">Commits</h4><ul style="margin: 0;">';
                     for (const c of directCommits) {
                       const shortSha = c.sha.substring(0, 7);
                       const message = c.commit.message.split('\n')[0];
@@ -116,9 +152,11 @@ jobs:
                     }
                     detailHtml += '</ul>';
                   }
+
+                  detailHtml += '</details>';
                 }
 
-                detailHtml += '<hr>';
+                detailHtml += '<hr style="margin: 24px 0;">';
 
               } catch (error) {
                 console.log(`Error fetching ${owner}/${repo}: ${error.message}`);
@@ -127,45 +165,9 @@ jobs:
               }
             }
 
-            core.setOutput('pr_text', allPrText || 'No PRs this week');
-            core.setOutput('commit_text', allCommitText || 'No commits this week');
             core.setOutput('detail_html', detailHtml);
             core.setOutput('summary', `${totalPRs} PRs, ${totalCommits} commits`);
-            core.setOutput('date_range', `${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}`);
-
-      - name: Generate AI summary with Claude
-        id: ai-summary
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          PR_TEXT="${{ steps.fetch-data.outputs.pr_text }}"
-          COMMIT_TEXT="${{ steps.fetch-data.outputs.commit_text }}"
-
-          PROMPT="You are summarizing what shipped this week across multiple projects for a developer's personal digest email.
-
-          Here are the PRs merged this week:
-          $PR_TEXT
-
-          Here are the commits this week:
-          $COMMIT_TEXT
-
-          Write a brief, friendly 3-4 sentence summary of what was accomplished across all projects. Group related work if it spans projects. Focus on impact, not just listing changes. If nothing shipped, say so briefly. Keep it concise and conversational."
-
-          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-            -H "Content-Type: application/json" \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -d "$(jq -n --arg prompt "$PROMPT" '{
-              "model": "claude-sonnet-4-20250514",
-              "max_tokens": 300,
-              "messages": [{"role": "user", "content": $prompt}]
-            }')")
-
-          SUMMARY=$(echo "$RESPONSE" | jq -r '.content[0].text // "Unable to generate summary."')
-
-          echo "summary<<EOF" >> $GITHUB_OUTPUT
-          echo "$SUMMARY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+            core.setOutput('date_range', dateRange);
 
       - name: Send email via Gmail SMTP
         uses: dawidd6/action-send-mail@v3
@@ -180,10 +182,7 @@ jobs:
           from: lim.matthewjames@gmail.com
           html_body: |
             <h1>What Shipped This Week</h1>
-            <p>${{ steps.fetch-data.outputs.date_range }}</p>
-            <hr>
-            <h2>Summary</h2>
-            <p style="font-size: 16px; line-height: 1.5;">${{ steps.ai-summary.outputs.summary }}</p>
-            <hr>
+            <p style="color: #666;">${{ steps.fetch-data.outputs.date_range }}</p>
+            <hr style="margin: 24px 0;">
             ${{ steps.fetch-data.outputs.detail_html }}
             <p style="color: #999; font-size: 12px;">Generated by Claude</p>
