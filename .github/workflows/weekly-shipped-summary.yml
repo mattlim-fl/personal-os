@@ -13,14 +13,19 @@ jobs:
     steps:
       - name: Fetch PRs and commits from all repos
         id: fetch-data
+        env:
+          GH_PAT_PERSONAL: ${{ secrets.GH_PAT_PERSONAL }}
+          PAT_FRACTAL: ${{ secrets.PAT_FRACTAL }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_PAT_PERSONAL }}
           script: |
+            const { Octokit } = require('@octokit/rest');
+
             // === CONFIGURE YOUR REPOS HERE ===
+            // Each repo specifies which PAT to use via the 'token' field
             const repos = [
-              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard' },
-              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews' },
+              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard', token: process.env.GH_PAT_PERSONAL },
+              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews', token: process.env.PAT_FRACTAL },
             ];
 
             const sevenDaysAgo = new Date();
@@ -33,10 +38,13 @@ jobs:
             let totalPRs = 0;
             let totalCommits = 0;
 
-            for (const { owner, repo, name } of repos) {
+            for (const { owner, repo, name, token } of repos) {
+              // Create a new Octokit instance with the specific token for this repo
+              const octokit = new Octokit({ auth: token });
+
               try {
                 // Fetch merged PRs
-                const { data: prs } = await github.rest.pulls.list({
+                const { data: prs } = await octokit.pulls.list({
                   owner,
                   repo,
                   state: 'closed',
@@ -50,7 +58,7 @@ jobs:
                 );
 
                 // Fetch commits from default branch
-                const { data: commits } = await github.rest.repos.listCommits({
+                const { data: commits } = await octokit.repos.listCommits({
                   owner,
                   repo,
                   since,
