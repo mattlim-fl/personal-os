@@ -19,18 +19,30 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { Octokit } = require('@octokit/rest');
-
             // === CONFIGURE YOUR REPOS HERE ===
-            // Each repo specifies which PAT to use via the 'token' field
+            // Each repo specifies which PAT env var to use
             const repos = [
-              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard', token: process.env.GH_PAT_PERSONAL },
-              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews', token: process.env.PAT_FRACTAL },
+              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard', tokenEnv: 'GH_PAT_PERSONAL' },
+              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews', tokenEnv: 'PAT_FRACTAL' },
             ];
 
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const since = sevenDaysAgo.toISOString();
+
+            async function fetchGitHub(url, token) {
+              const response = await fetch(url, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/vnd.github.v3+json',
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
+              });
+              if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+              }
+              return response.json();
+            }
 
             let allPrText = '';
             let allCommitText = '';
@@ -38,32 +50,25 @@ jobs:
             let totalPRs = 0;
             let totalCommits = 0;
 
-            for (const { owner, repo, name, token } of repos) {
-              // Create a new Octokit instance with the specific token for this repo
-              const octokit = new Octokit({ auth: token });
+            for (const { owner, repo, name, tokenEnv } of repos) {
+              const token = process.env[tokenEnv];
 
               try {
                 // Fetch merged PRs
-                const { data: prs } = await octokit.pulls.list({
-                  owner,
-                  repo,
-                  state: 'closed',
-                  sort: 'updated',
-                  direction: 'desc',
-                  per_page: 100
-                });
+                const prs = await fetchGitHub(
+                  `https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`,
+                  token
+                );
 
                 const mergedPRs = prs.filter(pr =>
                   pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
                 );
 
                 // Fetch commits from default branch
-                const { data: commits } = await octokit.repos.listCommits({
-                  owner,
-                  repo,
-                  since,
-                  per_page: 100
-                });
+                const commits = await fetchGitHub(
+                  `https://api.github.com/repos/${owner}/${repo}/commits?since=${since}&per_page=100`,
+                  token
+                );
 
                 // Filter out merge commits
                 const directCommits = commits.filter(c =>
