@@ -1,0 +1,64 @@
+name: What Shipped This Week
+
+on:
+  schedule:
+    # 7am London time (UTC in winter, UTC+1 in summer)
+    # Using 7am UTC - will be 8am during BST
+    - cron: '0 7 * * 5'  # Every Friday at 7am UTC
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch merged PRs from last 7 days
+        id: fetch-prs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PAT_PERSONAL }}
+          script: |
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            const { data: prs } = await github.rest.pulls.list({
+              owner: 'mattlim-fl',
+              repo: 'gm-dashboard',
+              state: 'closed',
+              sort: 'updated',
+              direction: 'desc',
+              per_page: 100
+            });
+
+            const mergedPRs = prs.filter(pr =>
+              pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
+            );
+
+            // Build email content
+            let html = '<h1>What Shipped This Week</h1>';
+            html += `<p>PRs merged in <strong>mattlim-fl/gm-dashboard</strong> from ${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}</p>`;
+
+            if (mergedPRs.length === 0) {
+              html += '<p>No PRs were merged this week.</p>';
+            } else {
+              html += '<ul>';
+              for (const pr of mergedPRs) {
+                html += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
+              }
+              html += '</ul>';
+            }
+
+            core.setOutput('email_body', html);
+            core.setOutput('pr_count', mergedPRs.length);
+
+      - name: Send email via Gmail SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "What Shipped This Week (${{ steps.fetch-prs.outputs.pr_count }} PRs)"
+          to: lim.matthewjames@gmail.com
+          from: lim.matthewjames@gmail.com
+          html_body: ${{ steps.fetch-prs.outputs.email_body }}
