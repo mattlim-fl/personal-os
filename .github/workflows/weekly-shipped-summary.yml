@@ -11,7 +11,7 @@ jobs:
   send-summary:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch data and generate per-repo summaries
+      - name: Fetch data and generate per-project summaries
         id: fetch-data
         env:
           GH_PAT_PERSONAL: ${{ secrets.GH_PAT_PERSONAL }}
@@ -20,10 +20,36 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            // === CONFIGURE YOUR REPOS HERE ===
-            const repos = [
-              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard', tokenEnv: 'GH_PAT_PERSONAL' },
-              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews', tokenEnv: 'PAT_FRACTAL' },
+            // === CONFIGURE YOUR PROJECTS HERE ===
+            // Group related repos (frontend/backend) under one project for a combined summary
+            const projects = [
+              {
+                name: 'Practice Interviews',
+                repos: [
+                  { owner: 'FractalLabsDev', repo: 'practice-interviews-web', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
+                  { owner: 'FractalLabsDev', repo: 'practice-interviews-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
+                ]
+              },
+              {
+                name: 'Vitaboom',
+                repos: [
+                  { owner: 'FractalLabsDev', repo: 'vitaboom-web', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
+                  { owner: 'FractalLabsDev', repo: 'vitaboom-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
+                ]
+              },
+              {
+                name: 'Therapist Genie',
+                repos: [
+                  { owner: 'FractalLabsDev', repo: 'therapygenie', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
+                  { owner: 'FractalLabsDev', repo: 'therapygenie-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
+                ]
+              },
+              {
+                name: 'GM Dashboard',
+                repos: [
+                  { owner: 'mattlim-fl', repo: 'gm-dashboard', tokenEnv: 'GH_PAT_PERSONAL' }
+                ]
+              },
             ];
 
             const sevenDaysAgo = new Date();
@@ -45,8 +71,8 @@ jobs:
               return response.json();
             }
 
-            async function generateSummary(repoName, prList, commitList) {
-              const prompt = `You are writing a brief weekly update summary for the "${repoName}" project.
+            async function generateSummary(projectName, prList, commitList) {
+              const prompt = `You are writing a brief weekly update summary for the "${projectName}" project.
 
             PRs merged this week:
             ${prList || 'None'}
@@ -66,7 +92,7 @@ jobs:
                   },
                   body: JSON.stringify({
                     model: 'claude-sonnet-4-20250514',
-                    max_tokens: 200,
+                    max_tokens: 250,
                     messages: [{ role: 'user', content: prompt }]
                   })
                 });
@@ -83,68 +109,123 @@ jobs:
             let totalPRs = 0;
             let totalCommits = 0;
 
-            for (const { owner, repo, name, tokenEnv } of repos) {
-              const token = process.env[tokenEnv];
+            for (const project of projects) {
+              // Collect data from all repos in this project
+              let projectPRs = [];
+              let projectCommits = [];
+              let repoDetails = [];
+              let hasError = false;
+              let errorMsg = '';
 
-              try {
-                // Fetch merged PRs
-                const prs = await fetchGitHub(
-                  `https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`,
-                  token
-                );
+              for (const { owner, repo, label, tokenEnv } of project.repos) {
+                const token = process.env[tokenEnv];
+                const repoLabel = label || repo;
 
-                const mergedPRs = prs.filter(pr =>
-                  pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
-                );
+                try {
+                  // Fetch merged PRs
+                  const prs = await fetchGitHub(
+                    `https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`,
+                    token
+                  );
 
-                // Fetch commits from default branch
-                const commits = await fetchGitHub(
-                  `https://api.github.com/repos/${owner}/${repo}/commits?since=${since}&per_page=100`,
-                  token
-                );
+                  const mergedPRs = prs.filter(pr =>
+                    pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
+                  );
 
-                // Filter out merge commits
-                const directCommits = commits.filter(c =>
-                  !c.commit.message.startsWith('Merge pull request') &&
-                  !c.commit.message.startsWith('Merge branch')
-                );
+                  // Fetch commits from default branch
+                  const commits = await fetchGitHub(
+                    `https://api.github.com/repos/${owner}/${repo}/commits?since=${since}&per_page=100`,
+                    token
+                  );
 
-                totalPRs += mergedPRs.length;
-                totalCommits += directCommits.length;
+                  // Filter out merge commits
+                  const directCommits = commits.filter(c =>
+                    !c.commit.message.startsWith('Merge pull request') &&
+                    !c.commit.message.startsWith('Merge branch')
+                  );
 
-                // Build text for AI summary
-                const prText = mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
-                const commitText = directCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n');
+                  // Add to project totals
+                  projectPRs.push(...mergedPRs.map(pr => ({ ...pr, repoLabel, owner, repo })));
+                  projectCommits.push(...directCommits.map(c => ({ ...c, repoLabel, owner, repo })));
 
-                // Generate AI summary for this repo
-                const summary = await generateSummary(name, prText, commitText);
+                  // Store repo details for HTML
+                  repoDetails.push({
+                    owner, repo, label: repoLabel,
+                    prs: mergedPRs,
+                    commits: directCommits
+                  });
 
-                // Build HTML for this repo
-                detailHtml += `<h2 style="margin-bottom: 5px;">${name}</h2>`;
-                detailHtml += `<p style="color: #666; margin-top: 0;"><a href="https://github.com/${owner}/${repo}">${owner}/${repo}</a></p>`;
+                } catch (error) {
+                  console.log(`Error fetching ${owner}/${repo}: ${error.message}`);
+                  hasError = true;
+                  errorMsg += `${repoLabel}: ${error.message}. `;
+                }
+              }
 
-                // AI Summary for this repo
-                detailHtml += `<div style="background: #f8f9fa; padding: 12px 16px; border-left: 4px solid #4a90d9; margin: 16px 0;">`;
-                detailHtml += `<p style="margin: 0; line-height: 1.5;">${summary}</p>`;
-                detailHtml += `</div>`;
+              totalPRs += projectPRs.length;
+              totalCommits += projectCommits.length;
 
-                if (mergedPRs.length === 0 && directCommits.length === 0) {
-                  detailHtml += '<p style="color: #999;">No activity this week.</p>';
-                } else {
-                  // Collapsible details
-                  detailHtml += `<details style="margin-top: 12px;"><summary style="cursor: pointer; color: #666;">View details (${mergedPRs.length} PRs, ${directCommits.length} commits)</summary>`;
+              // Build text for AI summary (combined across all repos)
+              const prText = projectPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
+              const commitText = projectCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n');
 
-                  if (mergedPRs.length > 0) {
-                    detailHtml += '<h4 style="margin: 12px 0 8px 0;">Pull Requests</h4><ul style="margin: 0;">';
-                    for (const pr of mergedPRs) {
+              // Generate AI summary for this project
+              const summary = await generateSummary(project.name, prText, commitText);
+
+              // Build HTML for this project
+              detailHtml += `<h2 style="margin-bottom: 5px;">${project.name}</h2>`;
+
+              // List all repos in this project
+              const repoLinks = project.repos.map(r =>
+                `<a href="https://github.com/${r.owner}/${r.repo}">${r.label || r.repo}</a>`
+              ).join(' · ');
+              detailHtml += `<p style="color: #666; margin-top: 0;">${repoLinks}</p>`;
+
+              // AI Summary for this project
+              detailHtml += `<div style="background: #f8f9fa; padding: 12px 16px; border-left: 4px solid #4a90d9; margin: 16px 0;">`;
+              detailHtml += `<p style="margin: 0; line-height: 1.5;">${summary}</p>`;
+              detailHtml += `</div>`;
+
+              if (hasError) {
+                detailHtml += `<p style="color: #c00; font-size: 14px;">Errors: ${errorMsg}</p>`;
+              }
+
+              if (projectPRs.length === 0 && projectCommits.length === 0 && !hasError) {
+                detailHtml += '<p style="color: #999;">No activity this week.</p>';
+              } else if (repoDetails.length > 0) {
+                // Collapsible details
+                detailHtml += `<details style="margin-top: 12px;"><summary style="cursor: pointer; color: #666;">View details (${projectPRs.length} PRs, ${projectCommits.length} commits)</summary>`;
+
+                // Group by repo if multiple repos
+                for (const rd of repoDetails) {
+                  if (rd.prs.length === 0 && rd.commits.length === 0) continue;
+
+                  // Show repo label if project has multiple repos
+                  if (project.repos.length > 1) {
+                    detailHtml += `<h4 style="margin: 16px 0 8px 0; color: #333;">${rd.label}</h4>`;
+                  }
+
+                  if (rd.prs.length > 0) {
+                    if (project.repos.length === 1) {
+                      detailHtml += '<h4 style="margin: 12px 0 8px 0;">Pull Requests</h4>';
+                    } else {
+                      detailHtml += '<p style="margin: 8px 0 4px 0; font-weight: 600; font-size: 14px;">Pull Requests</p>';
+                    }
+                    detailHtml += '<ul style="margin: 0;">';
+                    for (const pr of rd.prs) {
                       detailHtml += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
                     }
                     detailHtml += '</ul>';
                   }
 
-                  if (directCommits.length > 0) {
-                    detailHtml += '<h4 style="margin: 12px 0 8px 0;">Commits</h4><ul style="margin: 0;">';
-                    for (const c of directCommits) {
+                  if (rd.commits.length > 0) {
+                    if (project.repos.length === 1) {
+                      detailHtml += '<h4 style="margin: 12px 0 8px 0;">Commits</h4>';
+                    } else {
+                      detailHtml += '<p style="margin: 8px 0 4px 0; font-weight: 600; font-size: 14px;">Commits</p>';
+                    }
+                    detailHtml += '<ul style="margin: 0;">';
+                    for (const c of rd.commits) {
                       const shortSha = c.sha.substring(0, 7);
                       const message = c.commit.message.split('\n')[0];
                       const author = c.author?.login || c.commit.author.name;
@@ -152,17 +233,12 @@ jobs:
                     }
                     detailHtml += '</ul>';
                   }
-
-                  detailHtml += '</details>';
                 }
 
-                detailHtml += '<hr style="margin: 24px 0;">';
-
-              } catch (error) {
-                console.log(`Error fetching ${owner}/${repo}: ${error.message}`);
-                detailHtml += `<h2>${name}</h2>`;
-                detailHtml += `<p style="color: #c00;">Error fetching data: ${error.message}</p><hr>`;
+                detailHtml += '</details>';
               }
+
+              detailHtml += '<hr style="margin: 24px 0;">';
             }
 
             core.setOutput('detail_html', detailHtml);
