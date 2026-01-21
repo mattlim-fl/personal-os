@@ -11,84 +11,113 @@ jobs:
   send-summary:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch PRs and commits from last 7 days
+      - name: Fetch PRs and commits from all repos
         id: fetch-data
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_PAT_PERSONAL }}
           script: |
-            const owner = 'mattlim-fl';
-            const repo = 'gm-dashboard';
+            // === CONFIGURE YOUR REPOS HERE ===
+            const repos = [
+              { owner: 'mattlim-fl', repo: 'gm-dashboard', name: 'GM Dashboard' },
+              { owner: 'FractalLabsDev', repo: 'practice-interviews-web', name: 'Practice Interviews' },
+            ];
 
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const since = sevenDaysAgo.toISOString();
 
-            // Fetch merged PRs
-            const { data: prs } = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'closed',
-              sort: 'updated',
-              direction: 'desc',
-              per_page: 100
-            });
+            let allPrText = '';
+            let allCommitText = '';
+            let detailHtml = '';
+            let totalPRs = 0;
+            let totalCommits = 0;
 
-            const mergedPRs = prs.filter(pr =>
-              pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
-            );
+            for (const { owner, repo, name } of repos) {
+              try {
+                // Fetch merged PRs
+                const { data: prs } = await github.rest.pulls.list({
+                  owner,
+                  repo,
+                  state: 'closed',
+                  sort: 'updated',
+                  direction: 'desc',
+                  per_page: 100
+                });
 
-            // Fetch commits from default branch
-            const { data: commits } = await github.rest.repos.listCommits({
-              owner,
-              repo,
-              since,
-              per_page: 100
-            });
+                const mergedPRs = prs.filter(pr =>
+                  pr.merged_at && new Date(pr.merged_at) >= sevenDaysAgo
+                );
 
-            // Filter out merge commits
-            const directCommits = commits.filter(c =>
-              !c.commit.message.startsWith('Merge pull request') &&
-              !c.commit.message.startsWith('Merge branch')
-            );
+                // Fetch commits from default branch
+                const { data: commits } = await github.rest.repos.listCommits({
+                  owner,
+                  repo,
+                  since,
+                  per_page: 100
+                });
 
-            // Build data for AI summary
-            const prList = mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
-            const commitList = directCommits.map(c => {
-              const msg = c.commit.message.split('\n')[0];
-              return `- ${msg}`;
-            }).join('\n');
+                // Filter out merge commits
+                const directCommits = commits.filter(c =>
+                  !c.commit.message.startsWith('Merge pull request') &&
+                  !c.commit.message.startsWith('Merge branch')
+                );
 
-            // Build detailed HTML for email
-            let detailHtml = '<h2>Pull Requests</h2>';
-            if (mergedPRs.length === 0) {
-              detailHtml += '<p style="color: #666;">No PRs were merged this week.</p>';
-            } else {
-              detailHtml += '<ul>';
-              for (const pr of mergedPRs) {
-                detailHtml += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
+                totalPRs += mergedPRs.length;
+                totalCommits += directCommits.length;
+
+                // Build text for AI summary
+                if (mergedPRs.length > 0 || directCommits.length > 0) {
+                  allPrText += `\n${name}:\n`;
+                  if (mergedPRs.length > 0) {
+                    allPrText += mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n') + '\n';
+                  }
+                  allCommitText += `\n${name}:\n`;
+                  if (directCommits.length > 0) {
+                    allCommitText += directCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n') + '\n';
+                  }
+                }
+
+                // Build HTML for this repo
+                detailHtml += `<h2>${name}</h2>`;
+                detailHtml += `<p style="color: #666; margin-top: -10px;"><a href="https://github.com/${owner}/${repo}">${owner}/${repo}</a></p>`;
+
+                if (mergedPRs.length === 0 && directCommits.length === 0) {
+                  detailHtml += '<p style="color: #999;">No activity this week.</p>';
+                } else {
+                  if (mergedPRs.length > 0) {
+                    detailHtml += '<h3>Pull Requests</h3><ul>';
+                    for (const pr of mergedPRs) {
+                      detailHtml += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
+                    }
+                    detailHtml += '</ul>';
+                  }
+
+                  if (directCommits.length > 0) {
+                    detailHtml += '<h3>Commits</h3><ul>';
+                    for (const c of directCommits) {
+                      const shortSha = c.sha.substring(0, 7);
+                      const message = c.commit.message.split('\n')[0];
+                      const author = c.author?.login || c.commit.author.name;
+                      detailHtml += `<li><a href="${c.html_url}"><code>${shortSha}</code></a> ${message} by @${author}</li>`;
+                    }
+                    detailHtml += '</ul>';
+                  }
+                }
+
+                detailHtml += '<hr>';
+
+              } catch (error) {
+                console.log(`Error fetching ${owner}/${repo}: ${error.message}`);
+                detailHtml += `<h2>${name}</h2>`;
+                detailHtml += `<p style="color: #c00;">Error fetching data: ${error.message}</p><hr>`;
               }
-              detailHtml += '</ul>';
             }
 
-            detailHtml += '<h2>Commits</h2>';
-            if (directCommits.length === 0) {
-              detailHtml += '<p style="color: #666;">No direct commits this week.</p>';
-            } else {
-              detailHtml += '<ul>';
-              for (const c of directCommits) {
-                const shortSha = c.sha.substring(0, 7);
-                const message = c.commit.message.split('\n')[0];
-                const author = c.author?.login || c.commit.author.name;
-                detailHtml += `<li><a href="${c.html_url}"><code>${shortSha}</code></a> ${message} by @${author}</li>`;
-              }
-              detailHtml += '</ul>';
-            }
-
-            core.setOutput('pr_list', prList || 'No PRs this week');
-            core.setOutput('commit_list', commitList || 'No commits this week');
+            core.setOutput('pr_text', allPrText || 'No PRs this week');
+            core.setOutput('commit_text', allCommitText || 'No commits this week');
             core.setOutput('detail_html', detailHtml);
-            core.setOutput('summary', `${mergedPRs.length} PRs, ${directCommits.length} commits`);
+            core.setOutput('summary', `${totalPRs} PRs, ${totalCommits} commits`);
             core.setOutput('date_range', `${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}`);
 
       - name: Generate AI summary with Claude
@@ -96,35 +125,31 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          PR_LIST="${{ steps.fetch-data.outputs.pr_list }}"
-          COMMIT_LIST="${{ steps.fetch-data.outputs.commit_list }}"
+          PR_TEXT="${{ steps.fetch-data.outputs.pr_text }}"
+          COMMIT_TEXT="${{ steps.fetch-data.outputs.commit_text }}"
 
-          # Build the prompt
-          PROMPT="You are summarizing what shipped this week for a developer's personal digest email.
+          PROMPT="You are summarizing what shipped this week across multiple projects for a developer's personal digest email.
 
           Here are the PRs merged this week:
-          $PR_LIST
+          $PR_TEXT
 
           Here are the commits this week:
-          $COMMIT_LIST
+          $COMMIT_TEXT
 
-          Write a brief, friendly 2-3 sentence summary of what was accomplished this week. Focus on the actual changes and their impact, not just listing them. If nothing shipped, say so briefly. Keep it concise and conversational."
+          Write a brief, friendly 3-4 sentence summary of what was accomplished across all projects. Group related work if it spans projects. Focus on impact, not just listing changes. If nothing shipped, say so briefly. Keep it concise and conversational."
 
-          # Call Claude API
           RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
             -H "Content-Type: application/json" \
             -H "x-api-key: $ANTHROPIC_API_KEY" \
             -H "anthropic-version: 2023-06-01" \
             -d "$(jq -n --arg prompt "$PROMPT" '{
               "model": "claude-sonnet-4-20250514",
-              "max_tokens": 256,
+              "max_tokens": 300,
               "messages": [{"role": "user", "content": $prompt}]
             }')")
 
-          # Extract the text from response
           SUMMARY=$(echo "$RESPONSE" | jq -r '.content[0].text // "Unable to generate summary."')
 
-          # Save to output (escape for GitHub Actions)
           echo "summary<<EOF" >> $GITHUB_OUTPUT
           echo "$SUMMARY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -142,11 +167,10 @@ jobs:
           from: lim.matthewjames@gmail.com
           html_body: |
             <h1>What Shipped This Week</h1>
-            <p><strong>mattlim-fl/gm-dashboard</strong> &mdash; ${{ steps.fetch-data.outputs.date_range }}</p>
+            <p>${{ steps.fetch-data.outputs.date_range }}</p>
             <hr>
             <h2>Summary</h2>
             <p style="font-size: 16px; line-height: 1.5;">${{ steps.ai-summary.outputs.summary }}</p>
             <hr>
             ${{ steps.fetch-data.outputs.detail_html }}
-            <hr>
             <p style="color: #999; font-size: 12px;">Generated by Claude</p>
