@@ -46,48 +46,88 @@ jobs:
               per_page: 100
             });
 
-            // Filter out merge commits (they start with "Merge")
+            // Filter out merge commits
             const directCommits = commits.filter(c =>
               !c.commit.message.startsWith('Merge pull request') &&
               !c.commit.message.startsWith('Merge branch')
             );
 
-            // Build email content
-            let html = '<h1>What Shipped This Week</h1>';
-            html += `<p><strong>${owner}/${repo}</strong> &mdash; ${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}</p>`;
-            html += '<hr>';
+            // Build data for AI summary
+            const prList = mergedPRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
+            const commitList = directCommits.map(c => {
+              const msg = c.commit.message.split('\n')[0];
+              return `- ${msg}`;
+            }).join('\n');
 
-            // PRs section
-            html += '<h2>Pull Requests</h2>';
+            // Build detailed HTML for email
+            let detailHtml = '<h2>Pull Requests</h2>';
             if (mergedPRs.length === 0) {
-              html += '<p style="color: #666;">No PRs were merged this week.</p>';
+              detailHtml += '<p style="color: #666;">No PRs were merged this week.</p>';
             } else {
-              html += '<ul>';
+              detailHtml += '<ul>';
               for (const pr of mergedPRs) {
-                html += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
+                detailHtml += `<li><a href="${pr.html_url}"><strong>#${pr.number}</strong> ${pr.title}</a> by @${pr.user.login}</li>`;
               }
-              html += '</ul>';
+              detailHtml += '</ul>';
             }
 
-            // Commits section
-            html += '<h2>Commits</h2>';
+            detailHtml += '<h2>Commits</h2>';
             if (directCommits.length === 0) {
-              html += '<p style="color: #666;">No direct commits this week.</p>';
+              detailHtml += '<p style="color: #666;">No direct commits this week.</p>';
             } else {
-              html += '<ul>';
+              detailHtml += '<ul>';
               for (const c of directCommits) {
                 const shortSha = c.sha.substring(0, 7);
-                const message = c.commit.message.split('\n')[0]; // First line only
+                const message = c.commit.message.split('\n')[0];
                 const author = c.author?.login || c.commit.author.name;
-                html += `<li><a href="${c.html_url}"><code>${shortSha}</code></a> ${message} by @${author}</li>`;
+                detailHtml += `<li><a href="${c.html_url}"><code>${shortSha}</code></a> ${message} by @${author}</li>`;
               }
-              html += '</ul>';
+              detailHtml += '</ul>';
             }
 
-            const totalItems = mergedPRs.length + directCommits.length;
-            core.setOutput('email_body', html);
+            core.setOutput('pr_list', prList || 'No PRs this week');
+            core.setOutput('commit_list', commitList || 'No commits this week');
+            core.setOutput('detail_html', detailHtml);
             core.setOutput('summary', `${mergedPRs.length} PRs, ${directCommits.length} commits`);
-            core.setOutput('total', totalItems);
+            core.setOutput('date_range', `${sevenDaysAgo.toDateString()} to ${new Date().toDateString()}`);
+
+      - name: Generate AI summary with Claude
+        id: ai-summary
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          PR_LIST="${{ steps.fetch-data.outputs.pr_list }}"
+          COMMIT_LIST="${{ steps.fetch-data.outputs.commit_list }}"
+
+          # Build the prompt
+          PROMPT="You are summarizing what shipped this week for a developer's personal digest email.
+
+          Here are the PRs merged this week:
+          $PR_LIST
+
+          Here are the commits this week:
+          $COMMIT_LIST
+
+          Write a brief, friendly 2-3 sentence summary of what was accomplished this week. Focus on the actual changes and their impact, not just listing them. If nothing shipped, say so briefly. Keep it concise and conversational."
+
+          # Call Claude API
+          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d "$(jq -n --arg prompt "$PROMPT" '{
+              "model": "claude-sonnet-4-20250514",
+              "max_tokens": 256,
+              "messages": [{"role": "user", "content": $prompt}]
+            }')")
+
+          # Extract the text from response
+          SUMMARY=$(echo "$RESPONSE" | jq -r '.content[0].text // "Unable to generate summary."')
+
+          # Save to output (escape for GitHub Actions)
+          echo "summary<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send email via Gmail SMTP
         uses: dawidd6/action-send-mail@v3
@@ -100,4 +140,13 @@ jobs:
           subject: "What Shipped This Week (${{ steps.fetch-data.outputs.summary }})"
           to: lim.matthewjames@gmail.com
           from: lim.matthewjames@gmail.com
-          html_body: ${{ steps.fetch-data.outputs.email_body }}
+          html_body: |
+            <h1>What Shipped This Week</h1>
+            <p><strong>mattlim-fl/gm-dashboard</strong> &mdash; ${{ steps.fetch-data.outputs.date_range }}</p>
+            <hr>
+            <h2>Summary</h2>
+            <p style="font-size: 16px; line-height: 1.5;">${{ steps.ai-summary.outputs.summary }}</p>
+            <hr>
+            ${{ steps.fetch-data.outputs.detail_html }}
+            <hr>
+            <p style="color: #999; font-size: 12px;">Generated by Claude</p>
