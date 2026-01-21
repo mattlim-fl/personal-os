@@ -5,6 +5,7 @@
 export enum IntegrationType {
   GMAIL = 'gmail',
   GITHUB = 'github',
+  NOTION = 'notion',
 }
 
 export interface Integration {
@@ -25,4 +26,9 @@ export interface GmailIntegration extends Integration {
 export interface GitHubIntegration extends Integration {
   type: IntegrationType.GITHUB;
   username: string;
+}
+
+export interface NotionIntegration extends Integration {
+  type: IntegrationType.NOTION;
+  workspaceName?: string;
 }
