@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@personal-os/shared": ["../../packages/shared/src"]
+      "@personal-os/shared": ["../../packages/shared/src"],
+      "@config/*": ["../../config/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": false,

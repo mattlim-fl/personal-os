@@ -1,0 +1,31 @@
+{
+  "projects": [
+    {
+      "name": "Practice Interviews",
+      "repos": [
+        { "owner": "FractalLabsDev", "repo": "practice-interviews-web", "label": "Frontend", "tokenEnv": "GITHUB_PAT_FRACTAL" },
+        { "owner": "FractalLabsDev", "repo": "practice-interviews-backend", "label": "Backend", "tokenEnv": "GITHUB_PAT_FRACTAL" }
+      ]
+    },
+    {
+      "name": "Vitaboom",
+      "repos": [
+        { "owner": "FractalLabsDev", "repo": "vitaboom-web", "label": "Frontend", "tokenEnv": "GITHUB_PAT_FRACTAL" },
+        { "owner": "FractalLabsDev", "repo": "vitaboom-backend", "label": "Backend", "tokenEnv": "GITHUB_PAT_FRACTAL" }
+      ]
+    },
+    {
+      "name": "Therapist Genie",
+      "repos": [
+        { "owner": "FractalLabsDev", "repo": "therapygenie", "label": "Frontend", "tokenEnv": "GITHUB_PAT_FRACTAL" },
+        { "owner": "FractalLabsDev", "repo": "therapygenie-backend", "label": "Backend", "tokenEnv": "GITHUB_PAT_FRACTAL" }
+      ]
+    },
+    {
+      "name": "GM Dashboard",
+      "repos": [
+        { "owner": "mattlim-fl", "repo": "gm-dashboard", "tokenEnv": "GITHUB_PAT_PERSONAL" }
+      ]
+    }
+  ]
+}

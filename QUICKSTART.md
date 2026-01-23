@@ -24,12 +24,29 @@ cp apps/web/env.example apps/web/.env
 cp apps/api/env.example apps/api/.env
 ```
 
-3. **Configure Supabase** (Optional for initial run)
+3. **Configure Supabase** (Required for Phase 1)
 
-For now, you can run the app without Supabase configured. When you're ready:
+Phase 1 requires Supabase to be configured:
 
-- Create a project at [supabase.com](https://supabase.com)
-- Update `.env` files with your credentials
+- Project URL: `https://jlvfedukwgcitnwbvtpq.supabase.co`
+- Get your anon key from [Supabase dashboard](https://supabase.com/dashboard/project/jlvfedukwgcitnwbvtpq/settings/api)
+- Add to `apps/web/.env.local`:
+  ```
+  NEXT_PUBLIC_SUPABASE_URL=https://jlvfedukwgcitnwbvtpq.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+  ```
+
+4. **Configure GitHub** (Required for context sync)
+
+- Create token at [GitHub Settings](https://github.com/settings/tokens)
+- Select `repo` scope
+- Add to `apps/web/.env.local`:
+  ```
+  GITHUB_TOKEN=your_token_here
+  GITHUB_REPO_OWNER=mattlim-fl
+  GITHUB_REPO_NAME=personal-os
+  GITHUB_BRANCH=main
+  ```
 
 ## Run Locally
 
@@ -43,21 +60,27 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ## Verify Setup
 
-### Check health endpoint
+### Check the app is running
 
-```bash
-curl http://localhost:3000/api/health
-```
+Visit [http://localhost:3000](http://localhost:3000)
 
-Expected response:
+You should see:
+- Active context section
+- Context count
+- Quick links to contexts
 
-```json
-{
-  "status": "ok",
-  "timestamp": "2026-01-12T...",
-  "service": "personal-os-web"
-}
-```
+### Create your first context
+
+1. Click "New Context"
+2. Fill in the form
+3. Click "Create Context"
+4. Verify it appears on the home page
+
+### Check GitHub sync
+
+Visit [https://github.com/mattlim-fl/personal-os/tree/main/contexts](https://github.com/mattlim-fl/personal-os/tree/main/contexts)
+
+You should see your context as a Markdown file.
 
 ### Run type checking
 
@@ -158,21 +181,28 @@ rm -rf apps/web/.next
 ✅ Next.js 14 with App Router  
 ✅ TypeScript (strict mode)  
 ✅ ESLint + Prettier  
-✅ Supabase Edge Functions structure  
-✅ Shared types package  
-✅ Gmail integration (stub)  
-✅ GitHub integration (stub)  
-✅ Comprehensive documentation  
+✅ Supabase database with schema  
+✅ Context Management System (Phase 1)  
+✅ GitHub integration (context sync)  
+✅ Shared types package with Zod validation  
+✅ Gmail integration (stub - Phase 2)  
 
-## What's Next
+## Phase 1 Complete ✅
 
-⬜ Implement authentication  
-⬜ Set up database schema  
-⬜ Build UI components  
-⬜ Implement Gmail integration  
-⬜ Implement GitHub integration  
-⬜ Add testing  
-⬜ Deploy to production  
+✅ Context CRUD API  
+✅ Context UI pages  
+✅ GitHub sync for context briefs  
+✅ LLM context loader  
+✅ Active context management  
+
+## What's Next (Phase 2)
+
+⬜ Implement Gmail OAuth  
+⬜ Build email ingestion  
+⬜ Create classification engine  
+⬜ Build rules engine  
+⬜ Create approval queue UI  
+⬜ Add draft reply generation  
 
 ---
 

@@ -146,30 +146,71 @@ npm run format:check
 npm run type-check
 ```
 
-## 🔌 Integrations (Stub)
+## ✨ Features
 
-The following integrations are scaffolded but not yet implemented:
+### Phase 1: Context Management System ✅
 
-### Gmail
+**Status**: Complete and functional
 
-- Location: `apps/web/src/lib/integrations/gmail.ts`
-- Edge Function: `apps/api/functions/gmail-sync/`
-- Purpose: Email management and synchronization
+The Context System provides a single source of truth for organizational contexts, replacing Notion.
 
-### GitHub
+**Features**:
+- ✅ Full CRUD operations for contexts
+- ✅ Only one context can be active at a time
+- ✅ Contexts sync to GitHub as Markdown files
+- ✅ Clean UI for managing contexts
+- ✅ LLM-ready context formatting
+- ✅ Type-safe with Zod validation
 
-- Location: `apps/web/src/lib/integrations/github.ts`
-- Edge Function: `apps/api/functions/github-sync/`
-- Purpose: Repository and issue tracking
+**Components**:
+- API Routes: `/api/contexts/*`
+- UI Pages: `/contexts`, `/contexts/new`, `/contexts/[slug]`
+- GitHub Integration: Syncs to `contexts/` folder in repo
+- Shared Types: `@personal-os/shared`
+
+### Phase 2: Inbox Management (Planned)
+
+- Gmail integration
+- Email classification
+- Rules engine
+- Approval queue
+- Draft replies
+
+## 🔌 Integrations
+
+### GitHub ✅ Active
+
+- **Location**: `apps/web/src/lib/integrations/github.ts`
+- **Edge Function**: `apps/api/functions/github-sync/`
+- **Purpose**: Sync context briefs as Markdown files
+- **Status**: Fully implemented
+
+### Gmail (Stub)
+
+- **Location**: `apps/web/src/lib/integrations/gmail.ts`
+- **Edge Function**: `apps/api/functions/gmail-sync/`
+- **Purpose**: Email management and synchronization
+- **Status**: Stub only, Phase 2
 
 ## 🗄️ Database
 
-Supabase provides:
+**Status**: Schema created and deployed to Supabase
+
+### Tables
+
+- `users` - User accounts
+- `contexts` - Organizational contexts (Phase 1 ✅)
+- `context_briefs` - Aggregated context information
+- `tasks` - Action items (Phase 2)
+- `inbox_items` - Incoming items from integrations (Phase 2)
+- `rules` - Automation rules (Phase 2)
+
+### Supabase Features
 
 - PostgreSQL database
 - Auto-generated REST API
 - Real-time subscriptions
-- Authentication
+- Authentication (not yet configured)
 - Storage
 
 ### Local Development
@@ -253,15 +294,29 @@ Private project - All rights reserved.
 
 ## 🗺️ Roadmap
 
+### Phase 1: Context System ✅
+
+- [x] Set up database schema
+- [x] Implement GitHub integration
+- [x] Build context CRUD API
+- [x] Create context UI pages
+- [x] Add LLM context loader
+- [x] GitHub sync edge function
+
+### Phase 2: Inbox Management (Next)
+
+- [ ] Implement Gmail OAuth
+- [ ] Build email ingestion
+- [ ] Create classification engine
+- [ ] Build rules engine
+- [ ] Create approval queue UI
+- [ ] Add draft reply generation
+
+### Future
+
 - [ ] Implement authentication
-- [ ] Set up database schema
-- [ ] Implement Gmail integration
-- [ ] Implement GitHub integration
 - [ ] Add testing framework
 - [ ] Add CI/CD pipeline
-- [ ] Implement UI components
-- [ ] Add data visualization
-- [ ] Implement search functionality
 - [ ] Add mobile responsiveness
 
 ## 📚 Additional Documentation

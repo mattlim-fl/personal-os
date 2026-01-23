@@ -159,51 +159,47 @@ supabase functions serve
 
 ## Database Setup
 
-### Create Tables (Future)
+### Database Schema ✅
 
-When you're ready to add database tables:
+**Status**: Complete and deployed
 
-1. Create migration file:
+The database schema has been created with the following tables:
 
-   ```bash
-   cd apps/api
-   supabase migration new initial_schema
-   ```
+- `users` - User accounts
+- `contexts` - Organizational contexts
+- `context_briefs` - Aggregated context information
+- `tasks` - Action items (for Phase 2)
+- `inbox_items` - Incoming items (for Phase 2)
+- `rules` - Automation rules (for Phase 2)
 
-2. Edit the migration file in `apps/api/supabase/migrations/`
+**Migration**: `20260112_initial_schema`
 
-3. Apply migration:
-   ```bash
-   supabase db push
-   ```
+The schema is already deployed to your Supabase project at:
+`https://jlvfedukwgcitnwbvtpq.supabase.co`
 
-### Example Schema (Placeholder)
-
-```sql
--- Example table structure (not yet implemented)
-CREATE TABLE integrations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id),
-  type TEXT NOT NULL,
-  is_connected BOOLEAN DEFAULT false,
-  last_synced_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Enable Row Level Security
-ALTER TABLE integrations ENABLE ROW LEVEL SECURITY;
-
--- Create policy
-CREATE POLICY "Users can only access their own integrations"
-  ON integrations
-  FOR ALL
-  USING (auth.uid() = user_id);
-```
+You can view the tables in the [Supabase dashboard](https://supabase.com/dashboard/project/jlvfedukwgcitnwbvtpq/editor).
 
 ## Integration Setup
 
-### Gmail Integration (Stub)
+### GitHub Integration ✅ (Phase 1 - Complete)
+
+**Purpose**: Sync context briefs to GitHub as Markdown files
+
+1. Go to [GitHub Settings → Tokens](https://github.com/settings/tokens)
+2. Click "Generate new token (classic)"
+3. Select scope: `repo` (Full control of private repositories)
+4. Generate and copy the token
+5. Add to `apps/web/.env.local`:
+   ```env
+   GITHUB_TOKEN=your_github_token
+   GITHUB_REPO_OWNER=mattlim-fl
+   GITHUB_REPO_NAME=personal-os
+   GITHUB_BRANCH=main
+   ```
+
+**Verification**: Create a context and check https://github.com/mattlim-fl/personal-os/tree/main/contexts
+
+### Gmail Integration (Phase 2 - Planned)
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com)
 2. Create a new project
@@ -215,15 +211,7 @@ CREATE POLICY "Users can only access their own integrations"
    GMAIL_CLIENT_SECRET=your-client-secret
    ```
 
-### GitHub Integration (Stub)
-
-1. Go to GitHub Settings → Developer settings → OAuth Apps
-2. Create a new OAuth App
-3. Add credentials to `.env`:
-   ```env
-   GITHUB_CLIENT_ID=your-client-id
-   GITHUB_CLIENT_SECRET=your-client-secret
-   ```
+**Status**: Stub only, implementation planned for Phase 2
 
 ## Deployment
 
@@ -313,14 +301,28 @@ npm run lint
 
 ## Next Steps
 
+### Phase 1 Complete ✅
+
 1. ✅ Complete this setup guide
-2. ⬜ Define database schema
-3. ⬜ Implement authentication
-4. ⬜ Build UI components
-5. ⬜ Implement Gmail integration
-6. ⬜ Implement GitHub integration
-7. ⬜ Add tests
-8. ⬜ Deploy to production
+2. ✅ Database schema created and deployed
+3. ✅ GitHub integration implemented
+4. ✅ Context UI components built
+5. ✅ Context CRUD API implemented
+
+### Phase 2 (Next)
+
+1. ⬜ Implement Gmail OAuth
+2. ⬜ Build email ingestion
+3. ⬜ Create classification engine
+4. ⬜ Build rules engine
+5. ⬜ Create approval queue UI
+6. ⬜ Add draft reply generation
+
+### Future
+
+1. ⬜ Implement authentication
+2. ⬜ Add tests
+3. ⬜ Deploy to production
 
 ## Getting Help
 

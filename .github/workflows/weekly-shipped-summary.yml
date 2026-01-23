@@ -11,46 +11,23 @@ jobs:
   send-summary:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout config
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: config
+
       - name: Fetch data and generate per-project summaries
         id: fetch-data
         env:
-          GH_PAT_PERSONAL: ${{ secrets.GH_PAT_PERSONAL }}
-          PAT_FRACTAL: ${{ secrets.PAT_FRACTAL }}
+          GITHUB_PAT_PERSONAL: ${{ secrets.GITHUB_PAT_PERSONAL }}
+          GITHUB_PAT_FRACTAL: ${{ secrets.GITHUB_PAT_FRACTAL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         uses: actions/github-script@v7
         with:
           script: |
-            // === CONFIGURE YOUR PROJECTS HERE ===
-            // Group related repos (frontend/backend) under one project for a combined summary
-            const projects = [
-              {
-                name: 'Practice Interviews',
-                repos: [
-                  { owner: 'FractalLabsDev', repo: 'practice-interviews-web', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
-                  { owner: 'FractalLabsDev', repo: 'practice-interviews-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
-                ]
-              },
-              {
-                name: 'Vitaboom',
-                repos: [
-                  { owner: 'FractalLabsDev', repo: 'vitaboom-web', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
-                  { owner: 'FractalLabsDev', repo: 'vitaboom-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
-                ]
-              },
-              {
-                name: 'Therapist Genie',
-                repos: [
-                  { owner: 'FractalLabsDev', repo: 'therapygenie', label: 'Frontend', tokenEnv: 'PAT_FRACTAL' },
-                  { owner: 'FractalLabsDev', repo: 'therapygenie-backend', label: 'Backend', tokenEnv: 'PAT_FRACTAL' },
-                ]
-              },
-              {
-                name: 'GM Dashboard',
-                repos: [
-                  { owner: 'mattlim-fl', repo: 'gm-dashboard', tokenEnv: 'GH_PAT_PERSONAL' }
-                ]
-              },
-            ];
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('./config/github-projects.json', 'utf8'));
+            const projects = config.projects;
 
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
