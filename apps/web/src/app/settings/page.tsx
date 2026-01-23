@@ -4,8 +4,9 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { Calendar, Mail, Info, Layers, Inbox, Sun, Moon, Monitor } from 'lucide-react';
+import { Calendar, Mail, Info, Layers, Inbox, Sun, Moon, Monitor, Target } from 'lucide-react';
 import { GmailConnection, CalendarConnection } from '@/components/features/integrations';
+import { WeeklyGoalsSettings, WeeklySignalsSettings, DailyHabitsSettings } from '@/components/features/settings';
 import { Card, CardHeader, CardTitle, CardContent, Button, useToast } from '@/components/ui';
 import { LoadingState } from '@/components/shared';
 
@@ -98,6 +99,71 @@ function SettingsContent() {
       <div className="space-y-6">
         {/* Theme Section */}
         <ThemeSelector />
+
+        {/* Goals & Habits */}
+        <div>
+          <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-50 mb-4">
+            Goals & Habits
+          </h2>
+          <div className="space-y-4">
+            <Card>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950/50 flex items-center justify-center">
+                    <Target className="h-5 w-5 text-primary-500" />
+                  </div>
+                  <div>
+                    <CardTitle>Weekly Goals</CardTitle>
+                    <p className="text-sm text-surface-500 dark:text-surface-400">
+                      2-3 strategic goals for this week
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <WeeklyGoalsSettings />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-success-50 dark:bg-success-950/50 flex items-center justify-center">
+                    <Target className="h-5 w-5 text-success-500" />
+                  </div>
+                  <div>
+                    <CardTitle>Weekly Signals</CardTitle>
+                    <p className="text-sm text-surface-500 dark:text-surface-400">
+                      Recurring metrics to track each week
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <WeeklySignalsSettings />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-warning-50 dark:bg-warning-950/50 flex items-center justify-center">
+                    <Target className="h-5 w-5 text-warning-500" />
+                  </div>
+                  <div>
+                    <CardTitle>Daily Habits</CardTitle>
+                    <p className="text-sm text-surface-500 dark:text-surface-400">
+                      Habits to track in the weekly grid
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <DailyHabitsSettings />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {/* Integrations */}
         <div>

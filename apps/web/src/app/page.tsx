@@ -6,6 +6,11 @@ import {
   GitHubSection,
   FocusSection,
   TodoistSection,
+  WeeklyGoalsSection,
+  WeeklySignalsSection,
+  DailyHabitsSection,
+  DailyOutcomesSection,
+  WorkTasksSection,
 } from '@/components/features/briefing';
 
 function getGreeting() {
@@ -57,27 +62,42 @@ export default function Home() {
           <FocusSection />
         </section>
 
-        {/* Tier 2: Schedule + Goals (Twin Cards) */}
+        {/* Tier 2: Schedule + Weekly Goals (Twin Cards) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <section>
             <CalendarSection />
           </section>
           <section>
-            <TodoistSection mode="goals" />
+            <WeeklyGoalsSection />
           </section>
         </div>
 
-        {/* Tier 3: Work Tasks | Life Admin */}
+        {/* Tier 2.5: Daily Outcomes */}
+        <section className="mb-6">
+          <DailyOutcomesSection />
+        </section>
+
+        {/* Tier 3: Signals + Habits (Twin Cards) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <section>
-            <TodoistSection mode="work" />
+            <WeeklySignalsSection />
+          </section>
+          <section>
+            <DailyHabitsSection />
+          </section>
+        </div>
+
+        {/* Tier 4: Work Tasks | Life Admin */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <section>
+            <WorkTasksSection />
           </section>
           <section>
             <TodoistSection mode="life" />
           </section>
         </div>
 
-        {/* Tier 4: GitHub (Needs Attention only) */}
+        {/* Tier 5: GitHub (Needs Attention only) */}
         <section className="mb-6">
           <GitHubSection />
         </section>
