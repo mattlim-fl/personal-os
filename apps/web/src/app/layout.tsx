@@ -3,6 +3,8 @@ import { Header, ThemeProvider } from '@/components/layout';
 import { ToastProvider } from '@/components/ui';
 import './globals.css';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Personal OS',
   description: 'A unified system for managing personal data and workflows',

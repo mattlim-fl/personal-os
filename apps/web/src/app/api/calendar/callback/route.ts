@@ -4,6 +4,8 @@ import { supabase } from '@/lib/supabase';
 import { DEMO_USER_ID } from '@/lib/constants';
 import { createCalendarTokenSchema } from '@personal-os/shared';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/calendar/callback
  * Handles OAuth callback from Google Calendar
