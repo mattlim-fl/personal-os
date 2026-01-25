@@ -262,3 +262,35 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Autonomous sending (always human-in-the-loop)
 - Slack integration
 - Long-term planning features
+
+## Context Management
+
+Read context files at session start from `context/` directory.
+
+### When to Update Context Files
+
+#### context/current-state.md
+Update when:
+- New income stream starts or ends
+- Major life events change (house move complete, baby arrives)
+- Key dates shift significantly
+- Primary tools or workflows change
+
+#### context/preferences.md
+Update when:
+- Matt explicitly corrects a behaviour ("don't do X, do Y instead")
+- A clear pattern emerges (consistently rejects certain formats)
+- New working style preferences are stated
+
+#### context/projects.md
+Update when:
+- New project starts
+- Project status changes (active → winding down → complete)
+- Key contacts or repos change
+
+### Update Rules
+
+- Make minimal, targeted edits
+- Don't rewrite entire files unnecessarily
+- For preferences.md, ask for confirmation before writing
+- Always mention what you updated and why at the end of your response
