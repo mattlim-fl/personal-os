@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "supabase functions serve",
+    "dev": "echo 'Edge Functions deploy directly to Supabase — use: npm run deploy'",
     "deploy": "supabase functions deploy",
     "type-check": "echo 'Edge Functions use Deno - type checking skipped in Node environment'"
   },
