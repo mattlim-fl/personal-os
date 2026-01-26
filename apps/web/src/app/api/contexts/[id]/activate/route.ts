@@ -34,7 +34,7 @@ export async function POST(
     const { error: deactivateError } = await supabase
       .from('contexts')
       .update({ active: false })
-      .eq('active', true);
+      .is('active', true);
 
     if (deactivateError) {
       return NextResponse.json<ApiResponse>(

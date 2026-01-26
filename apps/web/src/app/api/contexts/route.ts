@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
     let query = supabase.from('contexts').select('*').order('created_at', { ascending: false });
 
     if (activeOnly) {
-      query = query.eq('active', true);
+      // Note: Using .is() for boolean filters as .eq() has unexpected behavior with booleans in some contexts
+      query = query.is('active', true);
     }
 
     if (slug) {
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
       const { error: deactivateError } = await supabase
         .from('contexts')
         .update({ active: false })
-        .eq('active', true);
+        .is('active', true);
 
       if (deactivateError) {
         return NextResponse.json<ApiResponse>(

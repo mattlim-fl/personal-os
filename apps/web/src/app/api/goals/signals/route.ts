@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
       .order('sort_order', { ascending: true });
 
     if (activeOnly) {
-      query = query.eq('active', true);
+      // Note: Using .is() for boolean filters as .eq() has unexpected behavior with booleans in some contexts
+      query = query.is('active', true);
     }
 
     const { data, error } = await query;

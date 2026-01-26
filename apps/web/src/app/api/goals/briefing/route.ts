@@ -14,6 +14,8 @@ import {
   type ApiResponse,
 } from '@personal-os/shared';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const weekStart = getWeekStart();
@@ -22,6 +24,7 @@ export async function GET() {
     const today = getToday();
 
     // Fetch all data in parallel
+    // Note: Using .is() for boolean filters as .eq() has unexpected behavior with booleans
     const [goalsResult, signalsResult, entriesResult, habitsResult, completionsResult, outcomeResult] =
       await Promise.all([
         supabase
@@ -32,7 +35,7 @@ export async function GET() {
         supabase
           .from('weekly_signals')
           .select('*')
-          .eq('active', true)
+          .is('active', true)
           .order('sort_order', { ascending: true }),
         supabase
           .from('weekly_signal_entries')
@@ -41,7 +44,7 @@ export async function GET() {
         supabase
           .from('daily_habits')
           .select('*')
-          .eq('active', true)
+          .is('active', true)
           .order('sort_order', { ascending: true }),
         supabase
           .from('habit_completions')

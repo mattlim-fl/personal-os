@@ -93,7 +93,7 @@ export async function PATCH(
       const { error: deactivateError } = await supabase
         .from('contexts')
         .update({ active: false })
-        .eq('active', true)
+        .is('active', true)
         .neq('id', id);
 
       if (deactivateError) {
