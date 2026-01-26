@@ -267,14 +267,39 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 Read context files at session start from `context/` directory.
 
+### Context File Structure
+
+```
+context/
+├── global.md              # Active projects list, cross-cutting context
+├── current-state.md       # Life events, income, key dates
+├── preferences.md         # Communication and working style
+└── projects/              # Individual project files
+    ├── personal-os.md
+    ├── state-street.md
+    ├── gm-dashboard.md
+    └── ...
+```
+
+### Loading Order
+
+1. Read `global.md` first to understand active projects
+2. Read `current-state.md` and `preferences.md` for life context
+3. Load relevant project file(s) from `projects/` based on the task
+
 ### When to Update Context Files
+
+#### context/global.md
+Update when:
+- Project status changes (active → winding down → archived)
+- New project starts
+- Cross-project priorities shift
 
 #### context/current-state.md
 Update when:
 - New income stream starts or ends
 - Major life events change (house move complete, baby arrives)
 - Key dates shift significantly
-- Primary tools or workflows change
 
 #### context/preferences.md
 Update when:
@@ -282,15 +307,17 @@ Update when:
 - A clear pattern emerges (consistently rejects certain formats)
 - New working style preferences are stated
 
-#### context/projects.md
+#### context/projects/*.md
 Update when:
-- New project starts
-- Project status changes (active → winding down → complete)
-- Key contacts or repos change
+- New tools, repos, or resources added to project
+- Key decisions made (add to Key Decisions section)
+- Claude instructions need updating based on learnings
+- Project completes → delete the file
 
 ### Update Rules
 
 - Make minimal, targeted edits
 - Don't rewrite entire files unnecessarily
 - For preferences.md, ask for confirmation before writing
+- When a project is complete, delete its file from projects/
 - Always mention what you updated and why at the end of your response
