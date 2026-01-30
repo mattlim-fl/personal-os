@@ -19,8 +19,8 @@ jobs:
       - name: Fetch data and generate per-project summaries
         id: fetch-data
         env:
-          GITHUB_PAT_PERSONAL: ${{ secrets.GITHUB_PAT_PERSONAL }}
-          GITHUB_PAT_FRACTAL: ${{ secrets.GITHUB_PAT_FRACTAL }}
+          GITHUB_PAT_PERSONAL: ${{ secrets.PAT_PERSONAL }}
+          GITHUB_PAT_FRACTAL: ${{ secrets.PAT_FRACTAL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         uses: actions/github-script@v7
         with:
