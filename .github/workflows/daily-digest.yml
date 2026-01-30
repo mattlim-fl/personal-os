@@ -1,0 +1,54 @@
+name: Daily Morning Digest
+
+on:
+  schedule:
+    # 7am London time (UTC in winter, UTC+1 in summer)
+    # Using 7am UTC - will be 8am during BST
+    - cron: '0 7 * * 1-5'  # Every weekday (Mon-Fri) at 7am UTC
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch digest from API
+        id: fetch
+        run: |
+          echo "Fetching digest from ${{ secrets.APP_URL }}/api/digest"
+
+          response=$(curl -s -f "${{ secrets.APP_URL }}/api/digest" || echo '{"error":"Failed to fetch"}')
+
+          # Check if we got an error
+          if echo "$response" | jq -e '.error' > /dev/null 2>&1; then
+            echo "Error fetching digest: $(echo $response | jq -r '.error')"
+            exit 1
+          fi
+
+          # Extract HTML content and save to file (handles large content better)
+          echo "$response" | jq -r '.data.html' > digest.html
+
+          # Extract date for subject
+          date=$(echo "$response" | jq -r '.data.date')
+          echo "date=$date" >> $GITHUB_OUTPUT
+
+          # Extract focus count for subject
+          focus_count=$(echo "$response" | jq -r '.data.focusItems | length')
+          if [ "$focus_count" = "0" ]; then
+            summary="All clear"
+          else
+            summary="$focus_count focus items"
+          fi
+          echo "summary=$summary" >> $GITHUB_OUTPUT
+
+      - name: Send email via Gmail SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "Morning Briefing (${{ steps.fetch.outputs.summary }})"
+          to: lim.matthewjames@gmail.com
+          from: Personal OS <lim.matthewjames@gmail.com>
+          html_body: file://digest.html
