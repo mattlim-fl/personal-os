@@ -529,6 +529,53 @@ export default function HgCapitalInterviewPage() {
           </div>
         </ExpandableSection>
 
+        {/* Story Bank */}
+        <ExpandableSection title="Story Bank — Practiced Narratives" icon={MessageSquare} badge="Rehearsed">
+          <div className="space-y-4 pt-4">
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-3">
+                📍 "Tell me about yourself" (90 seconds)
+              </h4>
+              <div className="text-sm text-primary-800 dark:text-primary-200 space-y-3">
+                <p>
+                  "I'm a product leader and AI specialist. For the last couple of years I've been consulting through my own company, mostly embedded with Fractal Labs — a software dev studio based out of the States.
+                </p>
+                <p>
+                  The headline: we restructured the entire org around AI-native development and operations. Not just the technology — the culture, the ways of working. Went back to first principles and rebuilt from the ground up. All functions. We built an internal autonomous agent called Ruk, but the harder part was getting people to actually conceptualize their work differently. New processes, new expectations, new habits.
+                </p>
+                <p>
+                  Result: 2x profit growth, 50% headcount reduction, while taking on twice as many projects.
+                </p>
+                <p>
+                  I've deployed that approach across client projects too — helped them implement it into their own systems and ways of working. Happy to go into specifics.
+                </p>
+                <p>
+                  I'm also building Deal Committee, an AI tool for M&A searchers.
+                </p>
+                <p>
+                  Before this I was a founder — raised VC for a mobile ordering startup, scaled across eight venues, wound down during COVID. Before that, corporate finance and strategy — interim CFO for a large infrastructure project in Australia.
+                </p>
+                <p>
+                  That's the mix: AI transformation — tech and people side — plus shipping products, plus a finance background. Happy to go deeper on any of it."
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+              <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
+                💡 Delivery Notes
+              </h4>
+              <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1">
+                <li>• Don't hedge: "The headline is..." not "I guess the headline..."</li>
+                <li>• Own the numbers: "50%" not "I think almost 50%"</li>
+                <li>• Watch filler words: "sort of", "really", "as well"</li>
+                <li>• "First principles" echoes Hg's "re-founding" language</li>
+                <li>• Keep to ~90 seconds — leave room for Sophie to steer</li>
+              </ul>
+            </div>
+          </div>
+        </ExpandableSection>
+
         {/* Why Hg */}
         <ExpandableSection title="Why Hg — Your Answer" icon={Sparkles}>
           <div className="space-y-4 pt-4">
