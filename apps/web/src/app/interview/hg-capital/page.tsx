@@ -411,18 +411,33 @@ export default function HgCapitalInterviewPage() {
                 Your Positioning
               </h4>
               <p className="text-sm text-primary-800 dark:text-primary-200">
-                You're a product leader who's been <strong>building with AI, not just talking about it</strong>.
-                You understand both the commercial side (business cases, stakeholder buy-in) and the technical side
-                (you actually build things).
+                You're a product leader who's been <strong>building AI transformation systems, not just talking about it</strong>.
+                You understand both the strategic level (how AI changes how organisations operate) and the execution level
+                (you can actually build and ship).
               </p>
+            </div>
+
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border-2 border-primary-300 dark:border-primary-700">
+              <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-3 flex items-center gap-2">
+                🎯 Ruk — Your Headline Story (Transformation)
+              </h4>
+              <p className="text-sm text-primary-800 dark:text-primary-200 mb-3">
+                "At Fractal, I've been part of building Ruk — an autonomous agent connected to all our company context..."
+              </p>
+              <ul className="text-sm text-primary-800 dark:text-primary-200 space-y-1">
+                <li>• <strong>What it is:</strong> Company-aware autonomous agent — not just code, but Slack, email, meeting transcripts, all context</li>
+                <li>• <strong>What it does:</strong> Scopes work, spins up sub-agents and microservices, delivers code, creates PRs for human review</li>
+                <li>• <strong>Why it matters:</strong> It's exactly Hg's "orchestrating agents" vision — humans set direction, agent executes across workstreams</li>
+                <li>• <strong>Your role:</strong> Product leadership on an AI transformation that's changing how the company operates</li>
+              </ul>
             </div>
 
             <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
               <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-3">
-                Deal Committee — Your Lead Story
+                Deal Committee — Your "I Can Build" Story
               </h4>
               <p className="text-sm text-surface-600 dark:text-surface-400 mb-3">
-                "I built Deal Committee, an AI-powered tool for acquisition searchers doing buy-side due diligence..."
+                "I've also shipped my own AI product — solo build, production users, revenue..."
               </p>
               <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-1">
                 <li>• <strong>Problem:</strong> Searchers spend hours reading CIMs, financials, market reports</li>
@@ -447,6 +462,24 @@ export default function HgCapitalInterviewPage() {
         {/* Questions to Ask */}
         <ExpandableSection title="Questions to Ask Sophie" icon={MessageSquare}>
           <div className="space-y-3 pt-4">
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <p className="text-xs font-medium text-primary-600 dark:text-primary-400 mb-1">Understanding the Scope</p>
+              <p className="text-sm text-surface-700 dark:text-surface-300">
+                "What's the current state of AI adoption internally at Hg? Are we starting from scratch or building on existing work?"
+              </p>
+            </div>
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <p className="text-xs font-medium text-primary-600 dark:text-primary-400 mb-1">Discovery vs Execution</p>
+              <p className="text-sm text-surface-700 dark:text-surface-300">
+                "Are there specific functions or use cases already identified, or is part of this role discovering where the opportunities are?"
+              </p>
+            </div>
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <p className="text-xs font-medium text-primary-600 dark:text-primary-400 mb-1">Role Shape</p>
+              <p className="text-sm text-surface-700 dark:text-surface-300">
+                "How much of this is greenfield discovery vs executing on a roadmap that already exists?"
+              </p>
+            </div>
             <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
               <p className="text-sm text-surface-700 dark:text-surface-300">
                 "What does success look like at 90 days for this role?"
