@@ -4,8 +4,8 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { Calendar, Mail, Info, Layers, Inbox, Sun, Moon, Monitor, Target } from 'lucide-react';
-import { GmailConnection, CalendarConnection } from '@/components/features/integrations';
+import { Calendar, Info, Layers, Sun, Moon, Monitor, Target } from 'lucide-react';
+import { CalendarConnection } from '@/components/features/integrations';
 import { WeeklyGoalsSettings, WeeklySignalsSettings, DailyHabitsSettings } from '@/components/features/settings';
 import { Card, CardHeader, CardTitle, CardContent, Button, useToast } from '@/components/ui';
 import { LoadingState } from '@/components/shared';
@@ -68,14 +68,10 @@ function SettingsContent() {
   const toast = useToast();
 
   useEffect(() => {
-    const gmailStatus = searchParams.get('gmail');
     const calendarStatus = searchParams.get('calendar');
     const error = searchParams.get('error');
 
-    if (gmailStatus === 'connected') {
-      toast.success('Gmail connected successfully!');
-      router.replace('/settings', { scroll: false });
-    } else if (calendarStatus === 'connected') {
+    if (calendarStatus === 'connected') {
       toast.success('Google Calendar connected successfully!');
       router.replace('/settings', { scroll: false });
     } else if (error) {
@@ -189,25 +185,6 @@ function SettingsContent() {
                 <CalendarConnection />
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-error-50 dark:bg-error-950/50 flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-error" />
-                  </div>
-                  <div>
-                    <CardTitle>Gmail</CardTitle>
-                    <p className="text-sm text-surface-500 dark:text-surface-400">
-                      Sync and triage emails
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <GmailConnection />
-              </CardContent>
-            </Card>
           </div>
         </div>
 
@@ -228,12 +205,8 @@ function SettingsContent() {
                 <span className="font-mono text-surface-900 dark:text-surface-100">1.0.0</span>
               </p>
               <p className="flex justify-between">
-                <span className="text-surface-500 dark:text-surface-400">Phase</span>
-                <span className="text-surface-900 dark:text-surface-100">Phase 2 MVP</span>
-              </p>
-              <p className="flex justify-between">
                 <span className="text-surface-500 dark:text-surface-400">Status</span>
-                <span className="text-warning font-medium">Development</span>
+                <span className="text-success font-medium">Active</span>
               </p>
             </div>
           </CardContent>
@@ -250,12 +223,6 @@ function SettingsContent() {
                 <Button variant="outline" size="sm">
                   <Layers className="h-4 w-4 mr-2" />
                   Manage Contexts
-                </Button>
-              </Link>
-              <Link href="/inbox">
-                <Button variant="outline" size="sm">
-                  <Inbox className="h-4 w-4 mr-2" />
-                  Approval Queue
                 </Button>
               </Link>
             </div>

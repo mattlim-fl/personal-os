@@ -4,14 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { Home, Layers, Inbox, Settings, Menu, Sun, Moon } from 'lucide-react';
+import { Home, Layers, Settings, Menu, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Contexts', href: '/contexts', icon: Layers },
-  { name: 'Inbox', href: '/inbox', icon: Inbox },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
@@ -19,32 +18,11 @@ export function Header() {
   const pathname = usePathname();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [pendingCount, setPendingCount] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Fetch pending inbox count
-  useEffect(() => {
-    const fetchPendingCount = async () => {
-      try {
-        const response = await fetch('/api/inbox?status=pending');
-        if (response.ok) {
-          const data = await response.json();
-          setPendingCount(data.length || 0);
-        }
-      } catch {
-        // Silently fail - count badge is optional
-      }
-    };
-
-    fetchPendingCount();
-    // Refresh count every 60 seconds
-    const interval = setInterval(fetchPendingCount, 60000);
-    return () => clearInterval(interval);
   }, []);
 
   const toggleTheme = () => {
@@ -90,11 +68,6 @@ export function Header() {
                   >
                     <Icon className="h-4 w-4" />
                     <span>{item.name}</span>
-                    {item.name === 'Inbox' && pendingCount > 0 && (
-                      <span className="bg-error text-white text-xs font-medium px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center">
-                        {pendingCount > 99 ? '99+' : pendingCount}
-                      </span>
-                    )}
                   </Link>
                 );
               })}
@@ -126,9 +99,6 @@ export function Header() {
                 aria-label="Open menu"
               >
                 <Menu className="h-5 w-5" />
-                {pendingCount > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full" />
-                )}
               </button>
             </div>
           </div>
@@ -139,7 +109,6 @@ export function Header() {
       <MobileNav
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
-        pendingCount={pendingCount}
       />
     </>
   );

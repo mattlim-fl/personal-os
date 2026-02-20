@@ -3,23 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { X, Home, Layers, Inbox, Settings } from 'lucide-react';
+import { X, Home, Layers, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MobileNavProps {
   open: boolean;
   onClose: () => void;
-  pendingCount?: number;
 }
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Contexts', href: '/contexts', icon: Layers },
-  { name: 'Inbox', href: '/inbox', icon: Inbox },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export function MobileNav({ open, onClose, pendingCount = 0 }: MobileNavProps) {
+export function MobileNav({ open, onClose }: MobileNavProps) {
   const pathname = usePathname();
 
   // Close on route change
@@ -87,11 +85,6 @@ export function MobileNav({ open, onClose, pendingCount = 0 }: MobileNavProps) {
                 >
                   <Icon className="h-5 w-5" />
                   <span>{item.name}</span>
-                  {item.name === 'Inbox' && pendingCount > 0 && (
-                    <span className="ml-auto bg-error text-white text-xs font-medium px-2 py-0.5 rounded-full">
-                      {pendingCount}
-                    </span>
-                  )}
                 </Link>
               );
             })}
