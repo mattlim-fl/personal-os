@@ -14,7 +14,7 @@ import {
   TrendingUp,
   Clock,
   MapPin,
-  Pound,
+  PoundSterling,
   Brain,
   Lightbulb,
   Quote,
@@ -55,7 +55,7 @@ function ExpandableSection({
             {title}
           </span>
           {badge && (
-            <Badge variant="secondary" className="ml-2">
+            <Badge variant="default" className="ml-2">
               {badge}
             </Badge>
           )}
@@ -182,15 +182,15 @@ export default function HgCapitalInterviewPage() {
       <Card className="mb-6 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/30 border-primary-200 dark:border-primary-800">
         <CardContent className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard label="Rate" value="£1,200/day" icon={Pound} />
+            <StatCard label="Rate" value="£1,200/day" icon={PoundSterling} />
             <StatCard label="Duration" value="3+ months" icon={Clock} />
             <StatCard label="Location" value="London Bridge" icon={MapPin} />
             <StatCard label="Days/Week" value="3-4 in office" icon={Building2} />
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             <Badge>Inside IR35</Badge>
-            <Badge variant="secondary">Likely Extension</Badge>
-            <Badge variant="secondary">Perm Possible</Badge>
+            <Badge variant="default">Likely Extension</Badge>
+            <Badge variant="default">Perm Possible</Badge>
           </div>
         </CardContent>
       </Card>
