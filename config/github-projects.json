@@ -1,7 +1,20 @@
 {
   "projects": [
     {
-      "name": "Practice Interviews",
+      "name": "Deal Committee",
+      "repos": [
+        { "owner": "mattlim-fl", "repo": "ai-investment-committee", "label": "Monorepo", "tokenEnv": "GITHUB_PAT_PERSONAL" }
+      ]
+    },
+    {
+      "name": "Interview Prep",
+      "repos": [
+        { "owner": "FractalLabsDev", "repo": "interview-prep-web", "label": "Frontend", "tokenEnv": "GITHUB_PAT_FRACTAL" },
+        { "owner": "FractalLabsDev", "repo": "interview-prep-backend", "label": "Backend", "tokenEnv": "GITHUB_PAT_FRACTAL" }
+      ]
+    },
+    {
+      "name": "Practice Interviews (Legacy)",
       "repos": [
         { "owner": "FractalLabsDev", "repo": "practice-interviews-web", "label": "Frontend", "tokenEnv": "GITHUB_PAT_FRACTAL" },
         { "owner": "FractalLabsDev", "repo": "practice-interviews-backend", "label": "Backend", "tokenEnv": "GITHUB_PAT_FRACTAL" }
@@ -24,7 +37,7 @@
     {
       "name": "GM Dashboard",
       "repos": [
-        { "owner": "mattlim-fl", "repo": "gm-dashboard", "tokenEnv": "GITHUB_PAT_PERSONAL" }
+        { "owner": "mattlim-fl", "repo": "gm-dashboard", "label": "Monorepo", "tokenEnv": "GITHUB_PAT_PERSONAL" }
       ]
     }
   ]
