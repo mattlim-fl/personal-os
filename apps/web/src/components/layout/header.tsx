@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { Home, Layers, Settings, Menu, Sun, Moon } from 'lucide-react';
+import { Home, Layers, Settings, Menu, Sun, Moon, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Contexts', href: '/contexts', icon: Layers },
+  { name: 'Deal Committee', href: '/deal-committee', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { X, Home, Layers, Settings } from 'lucide-react';
+import { X, Home, Layers, Settings, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MobileNavProps {
@@ -14,6 +14,7 @@ interface MobileNavProps {
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Contexts', href: '/contexts', icon: Layers },
+  { name: 'Deal Committee', href: '/deal-committee', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
