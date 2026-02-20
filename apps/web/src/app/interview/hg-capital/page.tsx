@@ -411,10 +411,36 @@ export default function HgCapitalInterviewPage() {
                 Your Positioning
               </h4>
               <p className="text-sm text-primary-800 dark:text-primary-200">
-                You're a product leader who's been <strong>building AI transformation systems, not just talking about it</strong>.
-                You understand both the strategic level (how AI changes how organisations operate) and the execution level
-                (you can actually build and ship).
+                You're not a "product person interested in AI." You've <strong>already done the transformation</strong> — 
+                restructured an org around AI, built autonomous agents, measured the results. And you have the 
+                commercial/finance background that maps to PE.
               </p>
+            </div>
+
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
+              <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-3">
+                🎯 Your Killer Stats
+              </h4>
+              <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-2">
+                <li>• <strong>2x profit growth, 50% headcount reduction</strong> at Fractal — transformation, not just building</li>
+                <li>• <strong>2.3x dev velocity in 3 months</strong> from Ruk — quantified agent impact</li>
+                <li>• <strong>$150k MRR in 3 months</strong> (Vitaboom) — you ship things that make money</li>
+                <li>• <strong>20k users + enterprise deals</strong> (Practice Interviews) — you can scale</li>
+                <li>• <strong>$2.5bn PPP as interim CFO</strong> — you've operated at serious scale in finance</li>
+              </ul>
+            </div>
+
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
+              <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-3">
+                How You Map to What They Want
+              </h4>
+              <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-2">
+                <li>• <strong>Analytical & commercial:</strong> Interim CFO ($2.5bn PPP), financial models for $1bn+ deals, Paxon strategy consulting</li>
+                <li>• <strong>Hands-on with AI:</strong> Built Ruk, Deal Committee. Daily user of Claude, Cursor, agentic tools.</li>
+                <li>• <strong>Driving transformation:</strong> Restructured Fractal → 2x profit, 50% headcount reduction</li>
+                <li>• <strong>Stakeholder management:</strong> Multi-venue rollouts (Snackr), client delivery (Fractal), interim CFO reporting</li>
+                <li>• <strong>PE/finance adjacent:</strong> Paxon, $2.5bn PPP, $1bn social housing deal, VC-backed founder</li>
+              </ul>
             </div>
 
             <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border-2 border-primary-300 dark:border-primary-700">
