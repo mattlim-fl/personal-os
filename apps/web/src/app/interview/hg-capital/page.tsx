@@ -561,6 +561,46 @@ export default function HgCapitalInterviewPage() {
               </div>
             </div>
 
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-3">
+                🤖 Ruk / AI Transformation Story (STAR)
+              </h4>
+              <div className="text-sm text-primary-800 dark:text-primary-200 space-y-3">
+                <p>
+                  <strong>Situation:</strong> "We saw agentic AI wasn't just about coding faster — it was going to fundamentally change how work gets done. We wanted to see how far we could push it."
+                </p>
+                <p>
+                  <strong>Task:</strong> "The goal was twofold: efficiency, yes — do more with less — but also free up time for higher-value creative work. Could we take on more clients while spending more time on the stuff that actually matters?"
+                </p>
+                <p>
+                  <strong>Approach:</strong> "We went back to first principles. Mapped out all our processes — daily, weekly, monthly — across every function. Not just engineering, but admin, client comms, everything. Identified where proactive agentic activity could add value. Where were the repetitive cognitive tasks? Where were the bottlenecks?"
+                </p>
+                <p>
+                  "That led to building Ruk. Started small, iterated constantly. Now Ruk actually builds on itself — we provide feedback, it improves its own capabilities. We act as human-in-the-loop at critical decision points, but the routine work runs autonomously."
+                </p>
+                <p>
+                  <strong>Result:</strong> "Doubled profit margin, doubled the number of clients, halved headcount. And honestly, the team is doing more interesting work now — less grunt, more thinking."
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+              <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-3">
+                🤝 Buy-in / Change Management Story
+              </h4>
+              <div className="text-sm text-primary-800 dark:text-primary-200 space-y-3">
+                <p>
+                  "Honestly, we didn't have to fight for it — and that's partly <em>why</em> it worked. Austin and I were aligned from the start that this wasn't optional. The market was moving."
+                </p>
+                <p>
+                  "The harder part was the <em>how</em>. We didn't mandate 'use AI' and hope for the best. We mapped every process first — engineering, admin, client comms — and identified where agentic AI could actually add value. Then we started small. Ruk didn't launch fully-formed; it grew through iteration. The team saw results quickly, which built trust."
+                </p>
+                <p>
+                  "The key was keeping humans in the loop at decision points. People weren't being replaced — they were being freed up for the interesting work. That reframe mattered. Once the first few workflows were running autonomously and people saw their grunt work disappearing, adoption wasn't a problem. It pulled rather than pushed."
+                </p>
+              </div>
+            </div>
+
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
               <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
                 💡 Delivery Notes
