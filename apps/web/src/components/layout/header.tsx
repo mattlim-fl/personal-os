@@ -96,11 +96,15 @@ export function Header() {
               {/* Mobile menu button */}
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+                className="md:hidden p-3 -m-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors active:bg-surface-200 dark:active:bg-surface-700"
                 onClick={() => setMobileMenuOpen(true)}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  setMobileMenuOpen(true);
+                }}
                 aria-label="Open menu"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-6 w-6" />
               </button>
             </div>
           </div>
