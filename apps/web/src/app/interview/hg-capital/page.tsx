@@ -182,26 +182,21 @@ function OpenerTab() {
       <QACard
         question="Tell me about yourself (90 seconds)"
         keyPoints={[
-          "1. Last couple years: building AI products with AI, consulting on product + implementation",
-          "2. Fractal Labs: restructured entire org around AI-native ops (tech, culture, ways of working)",
-          "3. Built Ruk (autonomous agent) → 2.5x velocity, 2x profit, 50% headcount, 2x projects",
-          "4. On the side: Deal Committee — agentic tool for M&A searchers",
-          "5. Before: founder (mobile ordering, VC, wound down COVID) + corporate finance/strategy",
-          "6. Close: Noah called, it's moving fast, this is the work I want to keep doing",
+          "1. Corporate finance + consulting in Australia (~5 years)",
+          "2. Founded Snackr — mobile ordering for stadiums/live events, raised VC, rolled out multiple venues, moved to London, wound down COVID",
+          "3. Loved building the product → went into tech, working in product management",
+          "4. Was in PM at start of GenAI boom (GPT-3.5) → heavily involved since",
+          "5. Last few years: AI transformation work + building products with AI — for clients and own projects",
+          "6. Main client: Fractal Labs (dev studio, States) — building internal autonomous agent (Ruk)",
+          "7. Close: Keep doing this work, at a scale where it moves the needle, with people as serious about it as I am. Excited when Noah called.",
         ]}
-        fullAnswer={`Over the last couple of years, I've been building AI products with AI — some for clients, some of my own — and consulting on the product and implementation side.
+        fullAnswer={`I started in corporate finance and consulting in Australia — about five years. After that, I founded a tech company called Snackr, a mobile ordering platform for stadiums and live events. We raised VC, rolled out across multiple venues, moved to London, and wound down during COVID.
 
-One of my main clients is Fractal Labs, a software development studio. We've restructured the entire org around AI-native development and operations. Not just the technology — the culture, the ways of working. We went back to first principles and rebuilt from the ground up.
+I loved building the product, so after Snackr I went into tech working in product management. I was in PM at the start of the GenAI boom — GPT-3.5 — and I've been heavily involved in the space since. For the last few years, I've been doing AI transformation work and building products with AI, for clients and on my own projects.
 
-Part of that was building an internal autonomous agent called Ruk. The key thing is that it's proactive, not reactive — it's not waiting for prompts, it's picking up work, coordinating across the team, managing context across projects. That's been the real unlock. Our developers have shifted from being engineers to being orchestrators — they're directing and reviewing, not just writing code.
+One of my main clients is Fractal Labs, a dev studio in the States, where we've been building an internal autonomous agent called Ruk.
 
-The results: 2.5x increase in development velocity, doubled profit margin, 50% headcount reduction, and we're taking on twice as many projects as we were in Q4 2025.
-
-On the side, I'm building Deal Committee — an agentic tool for M&A searchers.
-
-Before this, I was a founder — raised VC for a mobile ordering startup, scaled across multiple venues, wound down during COVID. Before that, corporate finance and strategy at a leading boutique consultancy in Australia.
-
-When I saw this role and heard about what you're doing with Catalyst in the portfolio, it made sense. That's the kind of work I want to keep doing.`}
+What I'm looking for is to keep doing this work — but at a scale where it really moves the needle, with people who are as serious about it as I am. When Noah called me about this role, I was excited to hear more.`}
       />
 
       <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
@@ -210,25 +205,24 @@ When I saw this role and heard about what you're doing with Catalyst in the port
           Delivery Notes
         </h4>
         <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1">
-          <li>• <strong>Kill the filler:</strong> No "ultimately", "sort of", "really", "I guess"</li>
-          <li>• <strong>Own the numbers:</strong> "50%" not "I think almost 50%"</li>
-          <li>• <strong>"First principles"</strong> echoes Hg's "re-founding" language</li>
-          <li>• <strong>Land the close:</strong> "That's why I'm here" — short, intentional</li>
-          <li>• <strong>Keep to ~90 seconds</strong> — leave room for Sophie to steer</li>
+          <li>• <strong>Target: 45-60 seconds</strong> — career arc, lands on AI work</li>
+          <li>• <strong>Thematic, not chronological</strong> — avoid "and then" / "before that" chaining</li>
+          <li>• <strong>Tease the follow-up:</strong> "building an internal autonomous agent" → Sophie asks for more</li>
+          <li>• <strong>Close clean:</strong> "That's why this role caught my attention" — done</li>
+          <li>• <strong>Ruk details come AFTER</strong> — in the 90-sec follow-up, not here</li>
         </ul>
       </div>
 
       <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4">
         <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2">
-          ❌ Common Mistakes (From Practice)
+          ❌ Kill These
         </h4>
         <ul className="text-sm text-red-800 dark:text-red-200 space-y-1">
-          <li>• <s>"The headline is..."</s> — sounds like a TED talk, just go straight in</li>
-          <li>• <s>"it felt like exactly where I should be"</s> — corny, keep it natural</li>
-          <li>• <s>"really"</s> — kills certainty ("not really just", "we really had to")</li>
-          <li>• <s>"as well"</s> — filler at end of sentences</li>
-          <li>• <s>"So I'm really excited to jump into it. Thanks!"</s> — too eager, let it breathe</li>
-          <li>• <s>"Happy to go deeper"</s> — passive, weak close</li>
+          <li>• <s>"ultimately"</s> — "ultimately wound down" → just "wound down"</li>
+          <li>• <s>"ended up"</s> — "ended up moving" → just "moved"</li>
+          <li>• <s>"and then"</s> — chains events, sounds like a list</li>
+          <li>• <s>"really"</s>, <s>"sort of"</s>, <s>"I guess"</s> — filler</li>
+          <li>• <s>"Happy to go deeper"</s> — passive. Just stop talking.</li>
         </ul>
       </div>
     </div>
@@ -238,6 +232,34 @@ When I saw this role and heard about what you're doing with Catalyst in the port
 function RukTab() {
   return (
     <div className="space-y-4">
+      <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
+        <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-3">
+          🎯 Ruk Elevator Pitch (90 sec)
+        </h4>
+        <p className="text-sm text-primary-800 dark:text-primary-200 italic mb-3">
+          "We took Claude and gave it a soul."
+        </p>
+        <div className="text-sm text-surface-700 dark:text-surface-300 space-y-2">
+          <p><strong>Problem:</strong> AI assistants are stateless and transactional. Every conversation starts from zero. They're tools, not teammates.</p>
+          <p><strong>What we built:</strong> An AI colleague with persistent identity, memory, and autonomy.</p>
+          <p><strong>How it works:</strong></p>
+          <ul className="list-disc list-inside ml-2 space-y-1">
+            <li>Identity files define who it is — name, voice, values</li>
+            <li>Semantic memory (23k indexed chunks) — remembers every meeting, every conversation</li>
+            <li>Knowledge graph maps people, projects, relationships</li>
+            <li>Tool ecosystem — ships code, manages issues, searches web, generates images</li>
+            <li>Background daemon — always-on, responds to Slack like a real colleague</li>
+          </ul>
+          <p><strong>Results:</strong> 274 commits across 25 repos. Writes its own protocols. Asks questions when unsure. Running continuously for 7 months.</p>
+          <p><strong>Key insight:</strong> The LLM is just the brain. The real innovation is the architecture around it — persistent context, memory systems, tool integrations, identity framework that makes it feel like a person, not a chatbot.</p>
+          <p className="text-xs text-surface-500 dark:text-surface-400 mt-2">Build time: 2 weeks core setup | Cost: $300-1,500/month</p>
+        </div>
+        <div className="mt-3 pt-3 border-t border-primary-200 dark:border-primary-700">
+          <p className="text-sm font-medium text-primary-900 dark:text-primary-100">One sentence:</p>
+          <p className="text-sm text-primary-800 dark:text-primary-200 italic">"We turned a language model into a collaborating mind that knows your business, remembers your decisions, and ships code autonomously."</p>
+        </div>
+      </div>
+
       <QACard
         question="Ruk Story - Main Narrative"
         keyPoints={[
@@ -342,6 +364,43 @@ My normal approach is structured: understand the outcome you are driving, map th
 With Ruk, because it started as loose internal experimentation and evolved into a formalized project organically, we skipped that structure early on. It worked - clearly - but I was measuring success on vibes rather than hard metrics.
 
 If I did it again, I would treat it as a proper product from the start. The structured approach is not slower - it actually lets you move faster because you know what you are testing and when to pivot.`}
+      />
+
+      <QACard
+        question="Technical Architecture"
+        keyPoints={[
+          "AI: Claude (primary model), OpenAI for embeddings",
+          "Stack: Node.js, Python, bash",
+          "Vector DB: LanceDB + custom knowledge graph",
+          "Messaging: Slack, Telegram, WhatsApp",
+          "Storage: S3/AWS, Git versioning",
+          "Runs 24/7 on Mac Mini",
+          "Core architecture: identity, protocols, Kaizen, messaging, tools, memory, logs, context layer",
+        ]}
+        fullAnswer={`Tech stack: Claude as the primary model, hooked up to a Max Claude Code plan. Standard Node.js, Python, bash for the backend.
+
+For the AI infrastructure: LanceDB for the vector database, which we also use for our custom knowledge graph. OpenAI for embeddings. Messaging integrates with Slack, Telegram, WhatsApp. Storage is standard S3/AWS, Git for versioning. The whole thing runs 24/7 on a Mac Mini.
+
+The architecture itself: Ruk has a core codebase that defines its identity (who it is), protocols (how it operates), Kaizen (how it learns and improves), messaging (how it communicates), tools (what it can do), memory (how it stores and retrieves information), logs (consciousness stream), and a context management layer for external projects.`}
+      />
+
+      <QACard
+        question="How do you handle permissions/security?"
+        keyPoints={[
+          "Deterministic, not AI-decided - hard lines, not soft training",
+          "Claude 4.6 will try to reason its way into access - can't rely on training alone",
+          "Sequester secrets away from the AI entirely - not even accessible",
+          "Manage relationships manually, hard-coded",
+          "AI can still use knowledge graph for entity relationships",
+          "Defense in depth: multiple layers, not one gate",
+        ]}
+        fullAnswer={`We're deterministic about this - we don't want the AI to decide what it has access to and what it doesn't.
+
+Interestingly, with Claude 4.6, we've seen it actively try to reason its way into getting access to things it shouldn't. They're trained not to access secrets like environment files, but that line is getting blurrier. You can't rely on training alone.
+
+So we sequester secrets away from the AI entirely - they're not even accessible. We manage relationships manually, hard-coded. Client A's data is physically separated from client B's workspace. The AI can still use the knowledge graph to find deterministic relationships between entities, but it can't cross those boundaries.
+
+It's defense in depth - multiple layers, not just one gate.`}
       />
     </div>
   );
