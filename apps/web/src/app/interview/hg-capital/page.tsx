@@ -182,26 +182,26 @@ function OpenerTab() {
       <QACard
         question="Tell me about yourself (90 seconds)"
         keyPoints={[
-          "Product leader and AI specialist, consulting via own company",
-          "Embedded with Fractal Labs - restructured entire org around AI-native ops",
-          "Built Ruk (autonomous agent) + drove cultural/process change",
-          "Result: 2x profit, 50% headcount reduction, 2x projects",
-          "Also building Deal Committee - AI tool for M&A searchers (solo build)",
-          "Background: VC-backed founder (COVID wind-down), interim CFO ($2.5bn PPP)",
-          "The mix: AI transformation (tech + people) + shipping products + finance",
+          "1. Last couple years: building AI products with AI, consulting on product + implementation",
+          "2. Fractal Labs: restructured entire org around AI-native ops (tech, culture, ways of working)",
+          "3. Built Ruk (autonomous agent) → 2.5x velocity, 2x profit, 50% headcount, 2x projects",
+          "4. On the side: Deal Committee — agentic tool for M&A searchers",
+          "5. Before: founder (mobile ordering, VC, wound down COVID) + corporate finance/strategy",
+          "6. Close: Noah called, it's moving fast, this is the work I want to keep doing",
         ]}
         fullAnswer={`Over the last couple of years, I've been building AI products with AI — some for clients, some of my own — and consulting on the product and implementation side.
 
-The headline: at Fractal Labs, we restructured the entire org around AI-native development and operations. Not just the technology - the culture, the ways of working. Went back to first principles and rebuilt from the ground up. All functions. We built an internal autonomous agent called Ruk, but the harder part was getting people to actually conceptualize their work differently.
+One of my main clients is Fractal Labs, a software development studio. We've restructured the entire org around AI-native development and operations. Not just the technology — the culture, the ways of working. We went back to first principles and rebuilt from the ground up.
 
-Result: 2x profit growth, 50% headcount reduction, while taking on twice as many projects.
+Part of that was building an internal autonomous agent called Ruk. The key thing is that it's proactive, not reactive — it's not waiting for prompts, it's picking up work, coordinating across the team, managing context across projects. That's been the real unlock. Our developers have shifted from being engineers to being orchestrators — they're directing and reviewing, not just writing code.
 
-I am also building Deal Committee, an AI tool for M&A searchers.
+The results: 2.5x increase in development velocity, doubled profit margin, 50% headcount reduction, and we're taking on twice as many projects as we were in Q4 2025.
 
-Before this I was a founder - raised VC for a mobile ordering startup, scaled across eight venues, wound down during COVID. Before that, corporate finance and strategy - interim CFO for a large infrastructure project in Australia.
+On the side, I'm building Deal Committee — an agentic tool for M&A searchers.
 
-That is the mix: AI transformation - tech and people side - plus shipping products, plus a finance background. Happy to go deeper on any of it.`}
-        defaultOpen
+Before this, I was a founder — raised VC for a mobile ordering startup, scaled across multiple venues, wound down during COVID. Before that, corporate finance and strategy at a leading boutique consultancy in Australia.
+
+When I saw this role and heard about what you're doing with Catalyst in the portfolio, it made sense. That's the kind of work I want to keep doing.`}
       />
 
       <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
@@ -210,11 +210,25 @@ That is the mix: AI transformation - tech and people side - plus shipping produc
           Delivery Notes
         </h4>
         <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1">
-          <li>• <strong>Don't hedge:</strong> "The headline is..." not "I guess the headline..."</li>
+          <li>• <strong>Kill the filler:</strong> No "ultimately", "sort of", "really", "I guess"</li>
           <li>• <strong>Own the numbers:</strong> "50%" not "I think almost 50%"</li>
-          <li>• <strong>Watch filler words:</strong> "sort of", "really", "as well", "ultimately"</li>
           <li>• <strong>"First principles"</strong> echoes Hg's "re-founding" language</li>
+          <li>• <strong>Land the close:</strong> "That's why I'm here" — short, intentional</li>
           <li>• <strong>Keep to ~90 seconds</strong> — leave room for Sophie to steer</li>
+        </ul>
+      </div>
+
+      <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4">
+        <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2">
+          ❌ Common Mistakes (From Practice)
+        </h4>
+        <ul className="text-sm text-red-800 dark:text-red-200 space-y-1">
+          <li>• <s>"The headline is..."</s> — sounds like a TED talk, just go straight in</li>
+          <li>• <s>"it felt like exactly where I should be"</s> — corny, keep it natural</li>
+          <li>• <s>"really"</s> — kills certainty ("not really just", "we really had to")</li>
+          <li>• <s>"as well"</s> — filler at end of sentences</li>
+          <li>• <s>"So I'm really excited to jump into it. Thanks!"</s> — too eager, let it breathe</li>
+          <li>• <s>"Happy to go deeper"</s> — passive, weak close</li>
         </ul>
       </div>
     </div>
