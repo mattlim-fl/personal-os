@@ -565,94 +565,88 @@ But honestly, the bigger draw is impact. What I am doing now works, but it is sm
 function CheatSheetTab() {
   return (
     <div className="space-y-4">
-      <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4">
+      {/* Ruk - Clear Explanation */}
+      <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border-2 border-primary-400">
         <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-2">
-          🎯 Systems of Record → Systems of Action
+          🤖 Ruk in 30 Seconds
         </h4>
-        <p className="text-sm text-primary-800 dark:text-primary-200">
-          THE key framing. Old software stores data ("automating filing cabinets").
-          AI-enabled software <strong>does the work itself</strong>. Value accrues where decisions and actions happen.
+        <p className="text-sm text-primary-800 dark:text-primary-200 mb-2">
+          An autonomous AI agent with <strong>persistent identity and memory</strong>. Not a chatbot — a colleague.
         </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
-          <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-2">
-            The Four Ds
-          </h4>
-          <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-1">
-            <li>• <strong>Data:</strong> Proprietary datasets</li>
-            <li>• <strong>Domain:</strong> Deep vertical expertise</li>
-            <li>• <strong>Distribution:</strong> Customer relationships</li>
-            <li>• <strong>Deterministic:</strong> Mission-critical accuracy</li>
-          </ul>
-        </div>
-        <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
-          <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-2">
-            Key Terms
-          </h4>
-          <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-1">
-            <li>• <strong>Re-founding:</strong> Fundamental restructure for AI</li>
-            <li>• <strong>Process-first:</strong> Fix workflows before tools</li>
-            <li>• <strong>Fire bullets, then cannonballs:</strong> Experiment, then scale</li>
-            <li>• <strong>Author to editor:</strong> Human role shift</li>
-          </ul>
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">Language Cheat Sheet</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-            <div className="font-medium text-green-600 dark:text-green-400">✓ Use</div>
-            <div className="font-medium text-red-600 dark:text-red-400">✗ Avoid</div>
-            
-            <div>Systems of action</div>
-            <div className="text-surface-500">Just "AI features"</div>
-            
-            <div>Re-founding</div>
-            <div className="text-surface-500">"Adding AI"</div>
-            
-            <div>Process-first</div>
-            <div className="text-surface-500">"Tool-first"</div>
-            
-            <div>Agentic</div>
-            <div className="text-surface-500">"Copilot"</div>
-            
-            <div>Fire bullets, then cannonballs</div>
-            <div className="text-surface-500">"Big bang rollout"</div>
-            
-            <div>Author to editor</div>
-            <div className="text-surface-500">"AI replacement"</div>
-            
-            <div>Orchestrating agents</div>
-            <div className="text-surface-500">"Automating tasks"</div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
-          On n8n / Low-Code
-        </h4>
-        <p className="text-sm text-amber-800 dark:text-amber-200">
-          Be honest: "Haven't used n8n professionally yet, but I've worked with similar visual workflow builders.
-          The mental model transfers — triggers, actions, conditionals, APIs. I'd be productive within hours."
-        </p>
-      </div>
-
-      <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
-        <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-3">
-          💰 Money Lines to Land Cleanly
-        </h4>
-        <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-2">
-          <li>• "2x profit, 50% headcount, 2x clients"</li>
-          <li>• "Orchestrating agents to deliver outcomes, not just code"</li>
-          <li>• "Are we optimizing a node, or rethinking the machine itself?"</li>
-          <li>• "The AI is infrastructure; the workflow is the product"</li>
+        <ul className="text-sm text-primary-800 dark:text-primary-200 space-y-1">
+          <li>• <strong>Identity files</strong> — knows who it is</li>
+          <li>• <strong>Semantic memory</strong> — remembers conversations, context</li>
+          <li>• <strong>Knowledge graph</strong> — maps people, projects, relationships</li>
+          <li>• <strong>Tools</strong> — ships code, manages issues, researches</li>
+          <li>• <strong>Always-on</strong> — 24/7 like a real teammate</li>
         </ul>
+        <p className="text-sm text-primary-800 dark:text-primary-200 mt-2 font-medium">
+          Result: 2x profit, 2x clients, 50% headcount. Team doing more creative work.
+        </p>
+        <p className="text-xs text-primary-600 dark:text-primary-400 mt-2 italic">
+          My role: Led product design, built context layer, drove adoption.
+        </p>
+      </div>
+
+      {/* Story Bank */}
+      <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
+        <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-2">
+          📚 Story Bank
+        </h4>
+        <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-1">
+          <li>• <strong>Ruk</strong> — transformation, end-to-end, results</li>
+          <li>• <strong>Deal Committee</strong> — I can build (solo, 1 week MVP)</li>
+          <li>• <strong>Snakr</strong> — founded, raised VC, scaled, wound down</li>
+          <li>• <strong>Practice Interviews</strong> — hard GTM, structural churn</li>
+          <li>• <strong>Hiring friends</strong> — mistake, learned expectations</li>
+          <li>• <strong>Offshore engineer</strong> — managing someone not adapting</li>
+        </ul>
+      </div>
+
+      {/* Language */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 border border-green-200 dark:border-green-800">
+          <h4 className="font-semibold text-green-900 dark:text-green-100 mb-2">
+            ✓ My Language
+          </h4>
+          <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+            <li>• Software-shaped problems (few have them)</li>
+            <li>• Metabolic rate (org speed)</li>
+            <li>• Orchestrators not engineers</li>
+            <li>• High pain, high frequency, low criticality</li>
+            <li>• Discover, diagnose, deliver</li>
+          </ul>
+        </div>
+        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+          <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+            ✓ Hg Language
+          </h4>
+          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+            <li>• Systems of action (not record)</li>
+            <li>• Re-founding (not optimizing)</li>
+            <li>• Process-first</li>
+            <li>• Fire bullets, then cannonballs</li>
+            <li>• Orchestrating agents</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Questions */}
+      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400">
+        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
+          ❓ Questions for Sophie
+        </h4>
+        <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-2 list-decimal list-inside">
+          <li><strong>State of play:</strong> Where is internal AI transformation at? Starting from scratch or building on existing work?</li>
+          <li><strong>2026 outlook:</strong> What do you see defining AI this year — personally and at Hg?</li>
+        </ol>
+      </div>
+
+      {/* Kill list */}
+      <div className="bg-red-50 dark:bg-red-950/30 rounded-xl p-3 border border-red-200 dark:border-red-800">
+        <p className="text-sm text-red-800 dark:text-red-200">
+          <strong>Kill:</strong> I guess • just • really • ultimately • overall • basically • sort of
+        </p>
       </div>
     </div>
   );
