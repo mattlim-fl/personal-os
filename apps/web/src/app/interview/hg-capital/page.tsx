@@ -662,13 +662,20 @@ function QuestionsTab() {
   return (
     <div className="space-y-3">
       <p className="text-sm text-surface-500 dark:text-surface-400 mb-4">
-        Ask the scoping questions first to understand what you're walking into.
+        Lead with these two. They're your openers.
       </p>
       
-      <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-800">
-        <p className="text-xs font-medium text-primary-600 dark:text-primary-400 mb-1">Understanding Scope</p>
+      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400 dark:border-amber-600">
+        <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-1">⭐ Primary: State of Play</p>
         <p className="text-sm text-surface-700 dark:text-surface-300">
-          What is the current state of AI adoption internally? Starting from scratch or building on existing work?
+          This role is about driving AI change and adoption internally — internal transformation at the fund. Where is that at the moment? Are we starting from scratch or building on existing work? Are there strong hypotheses about what's going to change? Can you give me a primer on the state of play at Hg?
+        </p>
+      </div>
+      
+      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400 dark:border-amber-600">
+        <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-1">⭐ Primary: 2026 Outlook</p>
+        <p className="text-sm text-surface-700 dark:text-surface-300">
+          What do you see — personally, but also Hg — as the state of play for AI in 2026? What do you think is going to define this year?
         </p>
       </div>
       
