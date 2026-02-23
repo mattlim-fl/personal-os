@@ -185,14 +185,14 @@ function OpenerTab() {
           "1. Corporate finance + consulting in Australia (~5 years)",
           "2. Founded Snackr — mobile ordering for stadiums/live events, raised VC, rolled out multiple venues, moved to London, wound down COVID",
           "3. Loved building the product → went into tech, working in product management",
-          "4. Was in PM at start of GenAI boom (GPT-3.5) → heavily involved since",
+          "4. Was in PM at start of GenAI boom (GPT-3.5) → building with it daily since",
           "5. Last few years: AI transformation work + building products with AI — for clients and own projects",
           "6. Main client: Fractal Labs (dev studio, States) — building internal autonomous agent (Ruk)",
           "7. Close: Keep doing this work, at a scale where it moves the needle, with people as serious about it as I am. Excited when Noah called.",
         ]}
         fullAnswer={`I started in corporate finance and consulting in Australia — about five years. After that, I founded a tech company called Snackr, a mobile ordering platform for stadiums and live events. We raised VC, rolled out across multiple venues, moved to London, and wound down during COVID.
 
-I loved building the product, so after Snackr I went into tech working in product management. I was in PM at the start of the GenAI boom — GPT-3.5 — and I've been heavily involved in the space since. For the last few years, I've been doing AI transformation work and building products with AI, for clients and on my own projects.
+I loved building the product, so after Snackr I went into tech working in product management. I was in PM at the start of the GenAI boom — GPT-3.5 — and I've been building with it daily since. For the last few years, I've been doing AI transformation work and building products with AI, for clients and on my own projects.
 
 One of my main clients is Fractal Labs, a dev studio in the States, where we've been building an internal autonomous agent called Ruk.
 
