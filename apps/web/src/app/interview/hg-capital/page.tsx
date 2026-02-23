@@ -565,6 +565,22 @@ But honestly, the bigger draw is impact. What I am doing now works, but it is sm
 function CheatSheetTab() {
   return (
     <div className="space-y-4">
+      {/* TMAY */}
+      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400">
+        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
+          👋 Tell Me About Yourself (60-90s)
+        </h4>
+        <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
+          <li>Corporate finance + consulting in Australia (~5 years)</li>
+          <li>Founded Snakr — mobile ordering, raised VC, moved to London, wound down COVID</li>
+          <li>Loved building product → went into PM</li>
+          <li>PM at start of GenAI boom (GPT-3.5) → <strong>building with it daily since</strong></li>
+          <li>Last few years: AI transformation + building products with AI</li>
+          <li>Main client: Fractal Labs → building Ruk (can tell you more)</li>
+          <li>Looking for: this work at scale, moves the needle, people as serious as I am</li>
+        </ol>
+      </div>
+
       {/* Ruk - Clear Explanation */}
       <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border-2 border-primary-400">
         <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-2">
