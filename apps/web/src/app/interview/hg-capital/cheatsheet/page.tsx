@@ -70,21 +70,13 @@ export default function CheatSheetPage() {
           </div>
         </div>
 
-        {/* Row 3: Questions + Kill */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div className="md:col-span-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-4 border-2 border-amber-400">
-            <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">❓ Questions for Sophie</h4>
-            <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
-              <li><strong>State of play:</strong> Where is internal AI transformation at? Starting from scratch or building on existing work?</li>
-              <li><strong>2026:</strong> What do you see defining AI this year — personally and at Hg?</li>
-            </ol>
-          </div>
-          <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-4 border border-red-200 dark:border-red-800">
-            <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2">🚫 Kill</h4>
-            <p className="text-sm text-red-800 dark:text-red-200">
-              I guess • just • really • ultimately • overall • basically
-            </p>
-          </div>
+        {/* Row 3: Questions */}
+        <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-4 border-2 border-amber-400">
+          <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">❓ Questions for Sophie</h4>
+          <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
+            <li><strong>State of play:</strong> Where is internal AI transformation at? Starting from scratch or building on existing work?</li>
+            <li><strong>2026:</strong> What do you see defining AI this year — personally and at Hg?</li>
+          </ol>
         </div>
       </div>
     </div>
