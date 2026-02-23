@@ -1,0 +1,174 @@
+name: Weekly Review (Friday)
+
+on:
+  schedule:
+    # 3pm London time (UTC in winter, UTC+1 in summer)
+    - cron: '0 15 * * 5'  # Every Friday at 3pm UTC
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout config
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: config
+
+      - name: Fetch data and generate review
+        id: generate
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_PAT_PERSONAL: ${{ secrets.PAT_PERSONAL }}
+          GITHUB_PAT_FRACTAL: ${{ secrets.PAT_FRACTAL }}
+        run: |
+          # Notion page IDs
+          LONG_TERM_GOALS_ID="245c7345-9c41-8066-ac06-efe14fb57515"
+          WEEKLY_TRACKER_ID="23ec7345-9c41-80dc-a14b-c0aa66f2b617"
+          
+          # Date range for the week
+          WEEK_START=$(date -d "last monday" +"%Y-%m-%d" 2>/dev/null || date -v-monday +"%Y-%m-%d")
+          WEEK_END=$(date +"%Y-%m-%d")
+          WEEK_DISPLAY=$(date +"%B %d, %Y")
+          
+          # Fetch Weekly Tracker page
+          echo "Fetching Weekly Tracker..."
+          TRACKER_RESPONSE=$(curl -s "https://api.notion.com/v1/blocks/${WEEKLY_TRACKER_ID}/children?page_size=100" \
+            -H "Authorization: Bearer ${NOTION_API_KEY}" \
+            -H "Notion-Version: 2022-06-28")
+          
+          TRACKER_TEXT=$(echo "$TRACKER_RESPONSE" | jq -r '
+            .results[]? | 
+            if .type == "paragraph" then .paragraph.rich_text[0]?.plain_text // ""
+            elif .type == "heading_1" then "# " + (.heading_1.rich_text[0]?.plain_text // "")
+            elif .type == "heading_2" then "## " + (.heading_2.rich_text[0]?.plain_text // "")
+            elif .type == "heading_3" then "### " + (.heading_3.rich_text[0]?.plain_text // "")
+            elif .type == "bulleted_list_item" then "• " + (.bulleted_list_item.rich_text[0]?.plain_text // "")
+            elif .type == "numbered_list_item" then "- " + (.numbered_list_item.rich_text[0]?.plain_text // "")
+            elif .type == "to_do" then (if .to_do.checked then "☑ " else "☐ " end) + (.to_do.rich_text[0]?.plain_text // "")
+            else ""
+            end
+          ' | head -100)
+          
+          # Fetch Long-Term Goals for context
+          echo "Fetching Long-Term Goals..."
+          GOALS_RESPONSE=$(curl -s "https://api.notion.com/v1/blocks/${LONG_TERM_GOALS_ID}/children?page_size=100" \
+            -H "Authorization: Bearer ${NOTION_API_KEY}" \
+            -H "Notion-Version: 2022-06-28")
+          
+          GOALS_TEXT=$(echo "$GOALS_RESPONSE" | jq -r '
+            .results[]? | 
+            if .type == "paragraph" then .paragraph.rich_text[0]?.plain_text // ""
+            elif .type == "heading_2" then "## " + (.heading_2.rich_text[0]?.plain_text // "")
+            elif .type == "bulleted_list_item" then "• " + (.bulleted_list_item.rich_text[0]?.plain_text // "")
+            elif .type == "to_do" then (if .to_do.checked then "☑ " else "☐ " end) + (.to_do.rich_text[0]?.plain_text // "")
+            else ""
+            end
+          ' | head -50)
+          
+          # Fetch GitHub activity summary (simplified - just counts)
+          echo "Fetching GitHub activity..."
+          
+          SEVEN_DAYS_AGO=$(date -d "7 days ago" +"%Y-%m-%dT00:00:00Z" 2>/dev/null || date -v-7d +"%Y-%m-%dT00:00:00Z")
+          
+          # Read project config
+          PROJECTS=$(cat config/github-projects.json)
+          
+          GITHUB_SUMMARY=""
+          
+          # Process each project
+          for project_name in $(echo "$PROJECTS" | jq -r '.projects[].name'); do
+            project=$(echo "$PROJECTS" | jq -r --arg name "$project_name" '.projects[] | select(.name == $name)')
+            
+            total_prs=0
+            total_commits=0
+            
+            for repo_json in $(echo "$project" | jq -c '.repos[]'); do
+              owner=$(echo "$repo_json" | jq -r '.owner')
+              repo=$(echo "$repo_json" | jq -r '.repo')
+              token_env=$(echo "$repo_json" | jq -r '.tokenEnv')
+              
+              # Get the right token
+              if [ "$token_env" = "GITHUB_PAT_PERSONAL" ]; then
+                token="$GITHUB_PAT_PERSONAL"
+              else
+                token="$GITHUB_PAT_FRACTAL"
+              fi
+              
+              # Fetch merged PRs count
+              prs=$(curl -s "https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=50" \
+                -H "Authorization: Bearer ${token}" \
+                -H "Accept: application/vnd.github.v3+json" 2>/dev/null || echo "[]")
+              
+              pr_count=$(echo "$prs" | jq "[.[] | select(.merged_at != null and .merged_at > \"${SEVEN_DAYS_AGO}\")] | length" 2>/dev/null || echo "0")
+              total_prs=$((total_prs + pr_count))
+              
+              # Fetch commits count
+              commits=$(curl -s "https://api.github.com/repos/${owner}/${repo}/commits?since=${SEVEN_DAYS_AGO}&per_page=50" \
+                -H "Authorization: Bearer ${token}" \
+                -H "Accept: application/vnd.github.v3+json" 2>/dev/null || echo "[]")
+              
+              commit_count=$(echo "$commits" | jq 'length' 2>/dev/null || echo "0")
+              total_commits=$((total_commits + commit_count))
+            done
+            
+            if [ "$total_prs" -gt 0 ] || [ "$total_commits" -gt 0 ]; then
+              GITHUB_SUMMARY="${GITHUB_SUMMARY}${project_name}: ${total_prs} PRs, ${total_commits} commits\n"
+            fi
+          done
+          
+          # Generate email with Claude
+          echo "Generating weekly review email..."
+          
+          PROMPT="You are Matt's personal assistant. It's Friday afternoon and you're preparing his weekly review email.
+
+          Here's the Weekly Tracker from Notion:
+          ${TRACKER_TEXT}
+
+          Here are Matt's Long-Term Goals for context:
+          ${GOALS_TEXT}
+
+          GitHub activity this week:
+          ${GITHUB_SUMMARY}
+
+          Week ending: ${WEEK_DISPLAY}
+
+          Write a brief Friday afternoon review email that:
+          1. Summarizes what got done this week (wins)
+          2. Notes what's still open or carried over
+          3. Highlights any lessons or insights
+          4. Optionally suggests focus for next week
+          5. Keeps a direct, no-fluff tone (Matt prefers dry and concise)
+
+          Output HTML email content only (no markdown). Use simple styling. Keep it brief - this is a reflection moment, not a report."
+
+          CLAUDE_RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: ${ANTHROPIC_API_KEY}" \
+            -H "anthropic-version: 2023-06-01" \
+            -d "$(jq -n --arg prompt "$PROMPT" '{
+              model: "claude-sonnet-4-20250514",
+              max_tokens: 1000,
+              messages: [{role: "user", content: $prompt}]
+            }')")
+          
+          EMAIL_HTML=$(echo "$CLAUDE_RESPONSE" | jq -r '.content[0].text // "Failed to generate email"')
+          
+          # Save to file for the email action
+          echo "$EMAIL_HTML" > email.html
+          
+          echo "week_display=${WEEK_DISPLAY}" >> $GITHUB_OUTPUT
+
+      - name: Send email via Gmail SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "Weekly Review — ${{ steps.generate.outputs.week_display }}"
+          to: lim.matthewjames@gmail.com
+          from: Personal OS <lim.matthewjames@gmail.com>
+          html_body: file://email.html
