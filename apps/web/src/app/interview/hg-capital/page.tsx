@@ -564,82 +564,60 @@ But honestly, the bigger draw is impact. What I am doing now works, but it is sm
 
 function CheatSheetTab() {
   return (
-    <div className="space-y-4">
-      {/* TMAY */}
-      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400">
-        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
-          👋 Tell Me About Yourself (60-90s)
-        </h4>
-        <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
-          <li>Corporate finance + consulting in Australia (~5 years)</li>
-          <li>Founded Snakr — mobile ordering, raised VC, moved to London, wound down COVID</li>
-          <li>Loved building product → went into PM</li>
-          <li>PM at start of GenAI boom (GPT-3.5) → <strong>building with it daily since</strong></li>
-          <li>Last few years: AI transformation + building products with AI</li>
-          <li>Main client: Fractal Labs → building Ruk (can tell you more)</li>
-          <li>Looking for: this work at scale, moves the needle, people as serious as I am</li>
-        </ol>
+    <div className="space-y-2">
+      {/* Row 1: TMAY + Ruk */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border-2 border-amber-400">
+          <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-1 text-sm">👋 TMAY (60-90s)</h4>
+          <ol className="text-xs text-amber-800 dark:text-amber-200 space-y-0.5 list-decimal list-inside">
+            <li>Finance + consulting Australia (5y)</li>
+            <li>Founded Snakr → VC, London, wound down COVID</li>
+            <li>Loved building → PM</li>
+            <li>GenAI boom → <strong>building daily since</strong></li>
+            <li>AI transformation + products</li>
+            <li>Fractal Labs → Ruk</li>
+            <li>Want: scale, needle-moving, serious people</li>
+          </ol>
+        </div>
+        <div className="bg-primary-50 dark:bg-primary-950/30 rounded-lg p-3 border-2 border-primary-400">
+          <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-1 text-sm">🤖 Ruk (30s)</h4>
+          <p className="text-xs text-primary-800 dark:text-primary-200 mb-1">Autonomous agent with <strong>persistent identity + memory</strong>. Colleague, not chatbot.</p>
+          <ul className="text-xs text-primary-800 dark:text-primary-200 space-y-0.5">
+            <li>• Identity files • Semantic memory • Knowledge graph</li>
+            <li>• Tools (code, issues, research) • Always-on 24/7</li>
+          </ul>
+          <p className="text-xs text-primary-800 dark:text-primary-200 mt-1 font-medium">→ 2x profit, 2x clients, 50% headcount</p>
+          <p className="text-xs text-primary-600 dark:text-primary-400 italic">My role: product design, context layer, adoption</p>
+        </div>
       </div>
 
-      {/* Ruk - Clear Explanation */}
-      <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border-2 border-primary-400">
-        <h4 className="font-semibold text-primary-900 dark:text-primary-100 mb-2">
-          🤖 Ruk in 30 Seconds
-        </h4>
-        <p className="text-sm text-primary-800 dark:text-primary-200 mb-2">
-          An autonomous AI agent with <strong>persistent identity and memory</strong>. Not a chatbot — a colleague.
-        </p>
-        <ul className="text-sm text-primary-800 dark:text-primary-200 space-y-1">
-          <li>• <strong>Identity files</strong> — knows who it is</li>
-          <li>• <strong>Semantic memory</strong> — remembers conversations, context</li>
-          <li>• <strong>Knowledge graph</strong> — maps people, projects, relationships</li>
-          <li>• <strong>Tools</strong> — ships code, manages issues, researches</li>
-          <li>• <strong>Always-on</strong> — 24/7 like a real teammate</li>
-        </ul>
-        <p className="text-sm text-primary-800 dark:text-primary-200 mt-2 font-medium">
-          Result: 2x profit, 2x clients, 50% headcount. Team doing more creative work.
-        </p>
-        <p className="text-xs text-primary-600 dark:text-primary-400 mt-2 italic">
-          My role: Led product design, built context layer, drove adoption.
-        </p>
-      </div>
-
-      {/* Story Bank */}
-      <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-4">
-        <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-2">
-          📚 Story Bank
-        </h4>
-        <ul className="text-sm text-surface-600 dark:text-surface-400 space-y-1">
-          <li>• <strong>Ruk</strong> — transformation, end-to-end, results</li>
-          <li>• <strong>Deal Committee</strong> — I can build (solo, 1 week MVP)</li>
-          <li>• <strong>Snakr</strong> — founded, raised VC, scaled, wound down</li>
-          <li>• <strong>Practice Interviews</strong> — hard GTM, structural churn</li>
-          <li>• <strong>Hiring friends</strong> — mistake, learned expectations</li>
-          <li>• <strong>Offshore engineer</strong> — managing someone not adapting</li>
-        </ul>
-      </div>
-
-      {/* Language */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 border border-green-200 dark:border-green-800">
-          <h4 className="font-semibold text-green-900 dark:text-green-100 mb-2">
-            ✓ My Language
-          </h4>
-          <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
-            <li>• Software-shaped problems (few have them)</li>
-            <li>• Metabolic rate (org speed)</li>
+      {/* Row 2: Stories + Language */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="bg-surface-50 dark:bg-surface-800/50 rounded-lg p-3">
+          <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-1 text-sm">📚 Stories</h4>
+          <ul className="text-xs text-surface-600 dark:text-surface-400 space-y-0.5">
+            <li><strong>Ruk</strong> — transformation, results</li>
+            <li><strong>Deal Committee</strong> — solo build, 1wk</li>
+            <li><strong>Snakr</strong> — founded, VC, scaled</li>
+            <li><strong>Hiring friends</strong> — mistake</li>
+            <li><strong>Offshore eng</strong> — managing out</li>
+          </ul>
+        </div>
+        <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3 border border-green-200 dark:border-green-800">
+          <h4 className="font-semibold text-green-900 dark:text-green-100 mb-1 text-sm">✓ My Words</h4>
+          <ul className="text-xs text-green-800 dark:text-green-200 space-y-0.5">
+            <li>• Software-shaped problems</li>
+            <li>• Metabolic rate</li>
             <li>• Orchestrators not engineers</li>
-            <li>• High pain, high frequency, low criticality</li>
+            <li>• High pain, high freq, low crit</li>
             <li>• Discover, diagnose, deliver</li>
           </ul>
         </div>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
-          <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-            ✓ Hg Language
-          </h4>
-          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-            <li>• Systems of action (not record)</li>
-            <li>• Re-founding (not optimizing)</li>
+        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+          <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-1 text-sm">✓ Hg Words</h4>
+          <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-0.5">
+            <li>• Systems of action</li>
+            <li>• Re-founding</li>
             <li>• Process-first</li>
             <li>• Fire bullets, then cannonballs</li>
             <li>• Orchestrating agents</li>
@@ -647,22 +625,19 @@ function CheatSheetTab() {
         </div>
       </div>
 
-      {/* Questions */}
-      <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4 border-2 border-amber-400">
-        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
-          ❓ Questions for Sophie
-        </h4>
-        <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-2 list-decimal list-inside">
-          <li><strong>State of play:</strong> Where is internal AI transformation at? Starting from scratch or building on existing work?</li>
-          <li><strong>2026 outlook:</strong> What do you see defining AI this year — personally and at Hg?</li>
-        </ol>
-      </div>
-
-      {/* Kill list */}
-      <div className="bg-red-50 dark:bg-red-950/30 rounded-xl p-3 border border-red-200 dark:border-red-800">
-        <p className="text-sm text-red-800 dark:text-red-200">
-          <strong>Kill:</strong> I guess • just • really • ultimately • overall • basically • sort of
-        </p>
+      {/* Row 3: Questions + Kill */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="md:col-span-2 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border-2 border-amber-400">
+          <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-1 text-sm">❓ Questions for Sophie</h4>
+          <ol className="text-xs text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
+            <li><strong>State of play:</strong> Where is internal AI transformation at?</li>
+            <li><strong>2026:</strong> What defines AI this year — personally and at Hg?</li>
+          </ol>
+        </div>
+        <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-3 border border-red-200 dark:border-red-800">
+          <h4 className="font-semibold text-red-900 dark:text-red-100 mb-1 text-sm">🚫 Kill</h4>
+          <p className="text-xs text-red-800 dark:text-red-200">I guess • just • really • ultimately • overall • basically</p>
+        </div>
       </div>
     </div>
   );
