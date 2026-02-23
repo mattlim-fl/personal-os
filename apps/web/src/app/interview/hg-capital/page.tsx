@@ -769,66 +769,6 @@ export default function HgCapitalInterviewPage() {
         </p>
       </div>
 
-      {/* Quick Facts */}
-      <Card className="mb-6 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/30 border-primary-200 dark:border-primary-800">
-        <CardContent className="p-4 md:p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <StatCard label="Rate" value="£1,200/day" icon={PoundSterling} />
-            <StatCard label="Duration" value="3+ months" icon={Clock} />
-            <StatCard label="Location" value="London Bridge" icon={MapPin} />
-            <StatCard label="Days/Week" value="3-4 in office" icon={Building2} />
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Badge>Inside IR35</Badge>
-            <Badge variant="default">Likely Extension</Badge>
-            <Badge variant="default">Perm Possible</Badge>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Prep Checklist */}
-      <Card className="mb-6">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <CheckCircle2 className="w-5 h-5 text-primary-500" />
-              Prep Checklist
-            </CardTitle>
-            <Badge variant={completedCount === totalCount ? 'default' : 'secondary'}>
-              {completedCount}/{totalCount}
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-            <ChecklistItem checked={checklist.reviewTabs} onToggle={() => toggleCheck('reviewTabs')}>
-              Review all tabs below
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.practiceOpener} onToggle={() => toggleCheck('practiceOpener')}>
-              Practice opener out loud (90 sec)
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.practiceRuk} onToggle={() => toggleCheck('practiceRuk')}>
-              Practice Ruk story + follow-ups
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.practiceDC} onToggle={() => toggleCheck('practiceDC')}>
-              Practice Deal Committee story
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.reviewN8n} onToggle={() => toggleCheck('reviewN8n')}>
-              Review n8n basics (20 mins)
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.prepareQuestions} onToggle={() => toggleCheck('prepareQuestions')}>
-              Prepare 3-4 questions for Sophie
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.checkLinkedIn} onToggle={() => toggleCheck('checkLinkedIn')}>
-              Check Sophie de Kok's LinkedIn
-            </ChecklistItem>
-            <ChecklistItem checked={checklist.checkRoute} onToggle={() => toggleCheck('checkRoute')}>
-              Check route to London Bridge
-            </ChecklistItem>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Tabs */}
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
 
