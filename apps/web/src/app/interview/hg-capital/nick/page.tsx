@@ -68,63 +68,67 @@ function AIFirstPOVTab() {
       <QACard
         question="How do you think about AI-first engineering?"
         keyPoints={[
-          "Start with process, not tools — map workflows before automating",
-          "Assess: tech stack maturity, data quality, team capability",
-          "Prioritise: high-value, low-risk, fast feedback loops first",
-          "\"Fire bullets then cannonballs\" — Hg's own language",
-          "Architecture matters: design for AI-native (agentic workflows, LLM-in-the-loop, structured outputs)",
-          "Measurement: dev velocity, cycle time, deployment frequency, defect rates",
+          "Equation has changed — exponentially more per person",
+          "AI as optimisation layer = fraction of value. Rebuild, don't bolt on.",
+          "Deliberating → delivering. Build to test, don't debate in docs.",
+          "Focus matters MORE. Cheap to build ≠ finish everything. Discipline.",
+          "Still need deep tech understanding — AI amplifies whoever has it",
+          "Comprehension debt — shipping code nobody understands. Testing critical.",
+          "Hand-cranked solutions no longer justified — cost equation flipped, rebuild it",
+          "Revisit AI limitations every 6 months. Today's models = worst you'll ever use.",
         ]}
-        fullAnswer={`My starting point is always process, not tools. Before you introduce any AI tooling, you need to understand the workflows you're operating in — what are the inputs, outputs, decision points, bottlenecks? Map that first.
+        fullAnswer={`The equation has changed. That's the starting point. What one person can achieve now is exponentially more than before. But most teams are still operating like it's 2023 — treating AI as an optimisation layer on top of existing processes. That captures a fraction of the value.
 
-Then I assess readiness: what's the tech stack maturity, data quality, team capability? You can't deploy AI-first engineering into a team that doesn't have basic CI/CD or clean data pipelines.
+The process is fundamentally different. It's shifted from deliberating to delivering. The old model was: spec exhaustively, then build. Now you can prototype in hours, so the bottleneck moves to decision quality and focus. You test ideas by building them, not by debating them in a doc.
 
-Once you have that map, prioritise ruthlessly. High-value, low-risk, fast feedback loops first. Hg uses the phrase 'fire bullets then cannonballs' — I think that's exactly right. Small experiments that prove value, then scale the ones that work.
+But it's not a free-for-all. Focus matters more than ever. The risk with AI-first engineering is you end up with lots of half-finished projects because building is cheap. You still need discipline — clear outcomes, tight prioritisation, finishing things.
 
-Architecture matters too — you're not just adding copilot to an IDE. You're designing systems where AI is a first-class participant: agentic workflows, LLM-in-the-loop for decisions, structured outputs that feed into deterministic systems.
+What the engineer actually needs changes too. You still need deep understanding of the tech, infrastructure, capabilities, and the product. AI doesn't remove that — it amplifies whoever has it. Testing and evaluation become critical. When agents produce code at volume, the bottleneck shifts to review, comprehension, and quality assurance. There's a real risk of what I'd call comprehension debt — shipping code that works but nobody truly understands. When something breaks, you can't debug what you didn't build.
 
-And you measure everything — dev velocity, cycle time, deployment frequency, defect rates. If you can't measure it, you're guessing.`}
+Continuously upgrading the system matters more than ever. Hand-cranked solutions used to have a place because the cost of engineering a proper system was too big. That's no longer the case. If it's held together with duct tape, rebuild it — the cost equation has flipped.
+
+And you need to keep revisiting assumptions. Whatever you think AI can't do today, revisit that every six months. The models you're using now are the worst models you'll ever use again.`}
         defaultOpen
       />
 
       <QACard
         question="How would you implement this across a portfolio of 58+ companies?"
         keyPoints={[
-          "Pattern match: what's common (CS automation, internal tooling, dev velocity) vs bespoke",
-          "Can't one-size-fits-all — different maturity levels, verticals, team sizes",
-          "Playbook approach: repeatable frameworks, customised execution",
-          "Start with willing companies, prove value, create pull not push",
-          "Knowledge sharing across portfolio (leverage Hg's Hive platform)",
-          "The \"re-founding\" question: when to layer AI on vs rebuild from scratch",
+          "Depends on company — team, leadership, maturity, stack. Not one-size-fits-all.",
+          "Common diagnosis, customised treatment. Assess the same way, prescribe differently.",
+          "Build once, deploy 58x — tooling, ref architectures, training, playbooks",
+          "Shared learning — most teams parsing hype vs reality alone. Centralise that.",
+          "Portfolio story — systematic AI transformation sells to LPs and future acquisitions",
         ]}
-        fullAnswer={`The first thing I'd do is pattern match. Across 58 companies, there are common problems — customer support automation, internal tooling, dev velocity — and bespoke ones unique to each vertical. You need to identify both.
+        fullAnswer={`It depends massively on the company — their team, their leadership's appetite for change, the gap between where they are and where they need to be, their size, their stack. So it's not one-size-fits-all.
 
-You can't one-size-fits-all this. A 500-person company with legacy Java monoliths needs a different approach than a 50-person startup on modern cloud-native stack. So I'd think of it as repeatable frameworks with customised execution — a playbook, not a script.
+But a fund like Hg needs repeatable patterns. Not one system for everyone, but a common way of assessing where a company is and what to prioritise. A shared diagnosis framework with customised treatment. You assess every company the same way — maturity, data quality, team capability, leadership readiness — but what you do with each one differs.
 
-Practically, I'd start with willing companies. Find the ones already experimenting, who have internal champions. Prove value there, document what works, and create pull across the portfolio rather than pushing. Hg's Hive platform is perfect for this — share the wins and the playbooks.
+There's a compounding advantage too. When you're working across 58 companies, you can build tooling, reference architectures, training programs once and deploy them many times. Catalyst already does this on the product side. The same logic applies to engineering practices — shared agent infrastructure, evaluation frameworks, onboarding playbooks. Each company doesn't have to figure it out from scratch.
 
-The harder question is when to layer AI onto existing systems versus fundamentally rebuild. That's the 're-founding' question. My instinct is: layer first for quick wins, but plan for re-founding where the architecture is fundamentally limiting.`}
+The shared learning piece is maybe the most underrated. Most engineering teams right now are trying to parse between hype and reality on their own — while also trying to do their jobs and ship features. They don't have someone dedicated to figuring out what actually works. Centralising that knowledge base, streamlining the signal from the noise, and making it available across the portfolio — that's genuine value that individual companies can't easily create for themselves.
+
+And there's a portfolio-level benefit. Being able to demonstrate systematic AI transformation across your portfolio is a powerful story — for LPs, for future acquisitions, for the companies themselves when they see peers in the portfolio already doing it. It becomes a selling point for the fund itself.`}
       />
 
       <QACard
         question="What does AI-first engineering look like in practice for a 10-year-old software company?"
         keyPoints={[
-          "Don't rip and replace — find the seams",
-          "Dev tooling first (fastest ROI, lowest risk): AI-assisted coding, CI/CD, testing",
-          "Then internal tooling: support, ops, data pipelines",
-          "Then product: AI features that create customer value",
-          "Team shape evolves: orchestrators not just engineers",
-          "The 1 PM + 2 engineers + agents model — promising but has failure modes",
+          "People first — leadership appetite? Workers' adoption curve? How entrenched?",
+          "Non-engineers: are they sidelined by janky coding practices? AI levels this up.",
+          "Product: is it old world for a reason? (legacy APIs, integrations, regulatory)",
+          "New cost equation: what would it cost to rework? What's the cost of NOT doing it?",
+          "Bolt-on chatbot vs AI-first rebuild — very different outcomes",
+          "Cursor subscriptions = better than nothing, but leaving massive value on the table",
+          "Real value: rethink how the work gets done, not just faster tools",
         ]}
-        fullAnswer={`You don't rip and replace. You find the seams — the natural boundaries in the system where you can introduce AI without destabilising everything.
+        fullAnswer={`I'd start with the people, as usual. What's leadership's appetite for change? What about the workers — how far down the adoption curve are they? How entrenched is the team in their current ways of working? And crucially, what about the non-engineers? In a lot of these companies, smart people are sidelined because they can't code, or because the engineering practices are so janky that only a few people can actually ship anything. AI changes that equation dramatically.
 
-I'd sequence it in three phases. First, dev tooling — this is fastest ROI and lowest risk. AI-assisted coding with tools like Cursor or Claude Code, AI in CI/CD pipelines for code review and testing, automated documentation. Every engineering team can benefit from this immediately.
+Then I'd look at the product. Is it old world for a reason? Connected to legacy APIs, old integrations, regulatory systems that constrain what you can do? Or is it old world because nobody's had the time or mandate to modernise? Those are very different situations.
 
-Second, internal tooling. Customer support automation, operational workflows, data pipeline management. These are high-pain, high-frequency problems where AI adds clear value.
+With the new cost equation, the questions you need to ask are: what would it actually cost to rework parts of this? And what's the cost of not doing it? Because bolting an AI chatbot onto a legacy product and rebuilding it AI-first are completely different outcomes — for the customer, for the team, for the business.
 
-Third, product. This is where you build AI features that create direct customer value — but it's also highest risk, so you earn the right to do it by proving competence in phases one and two.
-
-As you move through these phases, the team shape evolves. Engineers become orchestrators — they're managing AI agents, reviewing output, handling edge cases. The model I've seen Hg talk about — 1 PM, 2 engineers, leveraged by up to 12 AI agents — that's directionally right, but it has failure modes. You need strong engineering judgment to know when the agents are producing good work versus confident garbage. That's the skill gap most teams underestimate.`}
+I think if the answer is just to give everyone a Cursor subscription and call it done, you're leaving a significant amount of value on the table. It's better than nothing — but the real opportunity is in rethinking how the work gets done, not just giving people faster tools. That's the difference between optimisation and transformation.`}
       />
     </div>
   );
@@ -202,37 +206,37 @@ function QuestionsTab() {
   return (
     <div className="space-y-3">
       <p className="text-sm text-surface-500 dark:text-surface-400 mb-4">
-        Questions to ask Nick about the role and his work.
+        Priority: understand what this role actually is. Then dig into how they work.
       </p>
 
       <QuestionCard
-        question="What patterns have you seen across the portfolio — where does AI-first engineering stick vs where does it struggle?"
+        question="Can you walk me through what this role actually looks like day-to-day? What would I be doing in the first few weeks?"
         variant="primary"
       />
 
       <QuestionCard
-        question="How do you balance standardising an approach across 58 companies vs letting each find their own path?"
+        question="What's the target outcome you're looking for from this hire? What does success look like?"
         variant="primary"
       />
 
       <QuestionCard
-        question="What's the relationship between Catalyst and the Value Creation data team — where do you hand off?"
+        question="Who would I be working with — and who would I be reporting to? How is the team structured?"
+        variant="primary"
+      />
+
+      <QuestionCard
+        question="How does this role relate to Catalyst? Is this embedded in portfolio companies, working centrally, or something in between?"
+        variant="primary"
+      />
+
+      <QuestionCard
+        question="You've hired three interims since October — what have they been working on? What's worked, what hasn't?"
         variant="secondary"
       />
 
       <QuestionCard
-        question="Where are you seeing the biggest gap between AI hype and reality in portfolio engineering teams?"
+        question="How do you and the team stay on top of new tools and approaches? Is there a structured way you evaluate what's worth adopting?"
         variant="secondary"
-      />
-
-      <QuestionCard
-        question="What does the day-to-day look like for the interims you've hired — embedded in portcos or working centrally?"
-        variant="default"
-      />
-
-      <QuestionCard
-        question="What does success look like at 90 days in this role?"
-        variant="default"
       />
     </div>
   );
@@ -319,10 +323,10 @@ function CheatSheetTab() {
         <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border-2 border-amber-400">
           <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-1 text-sm">Questions for Nick</h4>
           <ol className="text-xs text-amber-800 dark:text-amber-200 space-y-0.5 list-decimal list-inside">
-            <li>Where does AI-first stick vs struggle?</li>
-            <li>Standardise vs let each find their path?</li>
-            <li>Catalyst vs Value Creation handoff?</li>
-            <li>Gap between AI hype and reality?</li>
+            <li>What does this role actually look like day-to-day?</li>
+            <li>Target outcome / what does success look like?</li>
+            <li>Who would I work with/for? Team structure?</li>
+            <li>Relationship to Catalyst? Embedded vs central?</li>
             <li>Day-to-day for interims — embedded or central?</li>
             <li>Success at 90 days?</li>
           </ol>
