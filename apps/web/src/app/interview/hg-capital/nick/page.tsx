@@ -276,6 +276,7 @@ function CheatSheetTab() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="bg-surface-50 dark:bg-surface-800/50 rounded-lg p-3">
           <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-1 text-sm">Nick&apos;s Background</h4>
+          <p className="text-[10px] text-surface-400 dark:text-surface-500 mb-1 italic">Fellow Aussie — natural rapport</p>
           <ul className="text-xs text-surface-600 dark:text-surface-400 space-y-0.5">
             <li>• Value Creation Data Team</li>
             <li>• Ex-TRIBE Head of Data (Melbourne)</li>
@@ -303,6 +304,16 @@ function CheatSheetTab() {
             <li>• Orchestrating agents</li>
           </ul>
         </div>
+      </div>
+
+      {/* Row 2.5: Back Pocket */}
+      <div className="bg-surface-50 dark:bg-surface-800/50 rounded-lg p-3">
+        <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-1 text-sm">🗂 Back Pocket (drop casually if relevant)</h4>
+        <ul className="text-xs text-surface-600 dark:text-surface-400 space-y-0.5">
+          <li>• <strong>Shadwell Basin</strong> — pro bono AI work for a youth charity. Shows range beyond commercial.</li>
+          <li>• <strong>Lawfront workshops</strong> — taught lawyers to vibe-code. Knows the adoption/training side.</li>
+          <li>• <strong>Rafa</strong> — personal AI agent running my life daily. Lives the AI-first thing.</li>
+        </ul>
       </div>
 
       {/* Row 3: Key Stats + Questions */}
@@ -333,7 +344,21 @@ function CheatSheetTab() {
         </div>
       </div>
 
-      {/* Row 4: Kill */}
+      {/* Row 4: Ruk Tech Stack */}
+      <div className="bg-surface-50 dark:bg-surface-800/50 rounded-lg p-3">
+        <h4 className="font-semibold text-surface-900 dark:text-surface-50 mb-1 text-sm">🛠 Ruk Tech Stack (if asked)</h4>
+        <p className="text-xs text-surface-600 dark:text-surface-400 italic mb-1">&quot;Claude as the primary model, LanceDB for vector storage and semantic search, custom knowledge graph for mapping entities and relationships, integrations into Slack, GitHub, and comms tools. Architecture has identity files, operating protocols, and a self-improvement loop.&quot;</p>
+        <ul className="text-xs text-surface-600 dark:text-surface-400 space-y-0.5">
+          <li>• <strong>LLM:</strong> Claude (Anthropic)</li>
+          <li>• <strong>Vector DB:</strong> LanceDB (semantic search)</li>
+          <li>• <strong>Knowledge graph:</strong> Custom — maps people, projects, relationships</li>
+          <li>• <strong>Integrations:</strong> Slack, GitHub, Telegram, WhatsApp</li>
+          <li>• <strong>Architecture:</strong> Identity files, operating protocols, Kaizen (self-improvement), context management layer</li>
+          <li>• <strong>Runtime:</strong> Daemon, runs 24/7</li>
+        </ul>
+      </div>
+
+      {/* Row 5: Kill */}
       <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-3 border border-red-200 dark:border-red-800">
         <h4 className="font-semibold text-red-900 dark:text-red-100 mb-1 text-sm">Kill</h4>
         <p className="text-xs text-red-800 dark:text-red-200">I guess • just • really • ultimately • overall • basically</p>
