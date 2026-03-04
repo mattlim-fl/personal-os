@@ -9,3 +9,4 @@
 | [Vitaboom](./vitaboom/) | Active — Matt likely moving on April | FractalLabsDev/vitaboom-web, vitaboom-backend | PM + engineering |
 | [Shadwell Basin](./shadwell-basin/) | Early — PoC needed | mattlim-fl/ai-grant-applications | Pro bono |
 | [Personal OS](./personal-os/) | v2 rebuild in progress | mattlim-fl/personal-os | Personal |
+| [Rafa](./rafa/) | Operational — upgrading March 2026 | openclaw/openclaw (platform) | The assistant |
