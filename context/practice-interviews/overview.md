@@ -1,17 +1,36 @@
-# Practice Interviews
+# Practice Interviews (Interview Prep)
 
 ## Summary
-AI-powered interview practice platform. Landing page / marketing site. Max is driving development. Matt in PM/oversight role.
+AI-powered interview preparation platform. Rebuilt from legacy "Practice Interviews" into "Interview Prep" — interview-centric tool where everything revolves around helping users prepare for specific interviews. Launching this week or early next.
 
-## Repo
-- **Landing page:** https://github.com/FractalLabsDev/practice-interviews-landing
-- **Branch:** `main`
-- **Language:** TypeScript
+## Repos
+- **Frontend:** https://github.com/FractalLabsDev/interview-prep-web (266 source files)
+  - Branch: `main`
+  - Language: TypeScript
+- **Backend:** https://github.com/FractalLabsDev/interview-prep-backend (78 source files)
+  - Branch: `main`
+  - Language: TypeScript
 
 ## People
 - **Lead:** Max (driving development)
-- **PM:** Matt (light touch)
+- **PM:** Matt (moving to project manager role, wants to hand off to Max)
 - **Client:** Austin Wood (Fractal Labs)
+- **Target:** NACE demo, university career services
 
 ## Status
-Live — NACE demo landing page, onboarding checklist, licensing model in progress. Matt's role is PM, not engineering.
+Rebuilt in last couple of weeks. Launching this week or early next. A couple of things need fixing up. Goal: get stable enough for Matt to step back to PM role and let Max handle day-to-day.
+
+## Revenue Model
+- B2B SaaS — licensing to universities/career services
+- Stripe billing integration
+- Client management (enterprises with multiple users)
+
+## Key Difference from Legacy
+| Aspect | Legacy PI | Interview Prep |
+|--------|-----------|----------------|
+| Repos | 3 (web, proxy, backend) | 2 (web, backend) |
+| API | `/api/v2/*` → proxy → `/api/*` | Direct `/api/*` |
+| State | Recoil + React Query | Zustand + React Query |
+| ORM | Sequelize (shared) | Sequelize (fresh DB) |
+| DB | Shared production | Separate beta DB |
+| Philosophy | Abstract practice | Interview-centric prep |
