@@ -1,323 +1,123 @@
-# Personal OS - Claude Code Development Guide
+# Personal OS v2
 
-## Project Overview
+## What This Is
 
-Personal OS is a single-user system for context management and Gmail inbox triage. It replaces Notion with a unified context system and turns email into a decision queue.
-
-**Philosophy**: Determinism over cleverness. Human-in-the-loop always.
+Rafa's backend + Matt's dashboard. A shared data layer where the AI assistant (Rafa) and the human (Matt) both read and write. Currently in early v2 rebuild — the web app is a skeleton, the **context store is the main deliverable so far**.
 
 ## Quick Start
 
 ```bash
-npm install          # Install all workspaces
-npm run dev          # Start Next.js on localhost:3000
-npm run type-check   # Verify TypeScript
-npm run lint         # Check code quality
-npm run format       # Format code with Prettier
+cd apps/web
+npm install
+npm run dev   # localhost:3000
 ```
 
-## Architecture
-
-- **Frontend**: `apps/web` - Next.js 14 (App Router)
-- **Backend**: `apps/api` - Supabase Edge Functions (Deno)
-- **Shared**: `packages/shared` - Types, utils, validation schemas
-- **Database**: Supabase PostgreSQL
-
-## Key Directories
+## Project Structure
 
 ```
-apps/web/src/
-├── app/                    # Next.js App Router pages and API routes
-│   ├── api/                # API routes (contexts, inbox, gmail, rules)
-│   ├── contexts/           # Context management pages
-│   ├── inbox/              # Inbox queue page
-│   └── settings/           # Settings page
-├── components/             # React components
-│   ├── ui/                 # Design system primitives (Button, Card, etc.)
-│   ├── layout/             # Layout components (Header, PageHeader)
-│   ├── features/           # Feature-specific components
-│   │   ├── contexts/       # Context-related components
-│   │   ├── inbox/          # Inbox-related components
-│   │   └── integrations/   # Integration components (Gmail, etc.)
-│   └── shared/             # Shared utility components
-└── lib/                    # Utilities and integrations
-
-packages/shared/src/
-├── types/                  # Zod schemas and TypeScript interfaces
-└── utils/                  # Shared utility functions
+personal-os/
+├── apps/web/              # Next.js 14 app (dashboard + API routes)
+│   ├── src/app/           # App Router pages
+│   ├── src/lib/           # Supabase client, utilities
+│   └── env.example        # Environment variables template
+├── context/               # 🧠 Project context store (the important bit)
+│   ├── _index.md          # Project index with status
+│   ├── therapist-genie/   # TG: overview, architecture, state, runbook
+│   ├── gm-dashboard/      # GM: overview, architecture, state, runbook
+│   ├── deal-committee/    # DC: overview, architecture, state, runbook
+│   ├── practice-interviews/ # PI: overview, architecture, state, runbook
+│   ├── vitaboom/          # VB: overview, architecture, state, runbook
+│   ├── shadwell-basin/    # SB: overview, architecture, state, runbook
+│   ├── personal-os/       # This project
+│   └── rafa/              # The AI assistant itself
+├── docs/                  # Specs and documentation
+│   └── SPEC.md            # v2 spec (context store + coding pipeline + dashboard)
+├── .github/workflows/     # Scheduled email workflows
+│   ├── daily-digest.yml       # Weekday 7am UTC
+│   ├── weekly-goals-monday.yml # Monday 9:30am UTC
+│   ├── weekly-review-friday.yml # Friday 3pm UTC
+│   └── weekly-shipped-summary.yml # Friday 7am UTC
+└── CLAUDE.md              # This file
 ```
 
-## Component Guidelines
+## Context Store
 
-### Creating Components
+The `context/` directory is the structured knowledge base for all of Matt's projects. Each project has:
 
-1. Use `'use client'` only when needed (state, effects, browser APIs)
-2. Import types from `@personal-os/shared`
-3. Use design system primitives from `@/components/ui`
-4. Keep components under 150 lines
-5. Use `cn()` for conditional Tailwind classes
+| File | Purpose |
+|------|---------|
+| `overview.md` | What it is, repos, people, status |
+| `architecture.md` | Stack, directory structure, patterns, data model |
+| `state.md` | Current priorities, recent changes, known issues |
+| `runbook.md` | How to run, test, deploy, env vars, key commands |
 
-### Component Template
+**When working on a project:** Read its context files first. They contain the repo URLs, coding conventions, patterns, and current state you need.
 
-```tsx
-'use client';
+**After working on a project:** Update `state.md` with what changed.
 
-import { cn } from '@/lib/utils';
+## Tech Stack
 
-interface MyComponentProps {
-  className?: string;
-  children?: React.ReactNode;
-}
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 14 (App Router) |
+| Styling | Tailwind CSS |
+| Database | Supabase (project ref: `jlvfedukwgcitnwbvtpq`) |
+| Deployment | Netlify (https://matt-os.netlify.app/) |
+| Auth | None yet (single user) |
 
-export function MyComponent({ className, children }: MyComponentProps) {
-  return (
-    <div className={cn('base-styles', className)}>
-      {children}
-    </div>
-  );
-}
+## Supabase
+
+```bash
+# Existing tables (from v1, still have data):
+# weekly_goals, weekly_signals, weekly_signal_entries,
+# daily_habits, habit_completions, daily_outcomes,
+# users, contexts, tasks, inbox_items, rules, context_briefs,
+# gmail_tokens
+
+# Project ref
+supabase link --project-ref jlvfedukwgcitnwbvtpq
 ```
 
-### Design System Usage
+## GitHub Actions Workflows
 
-Always use UI primitives for consistency:
+These run independently and send emails via Gmail SMTP:
 
-```tsx
-import { Button, Card, CardHeader, CardTitle, CardContent, Badge } from '@/components/ui';
+| Workflow | Schedule | What It Does |
+|----------|----------|--------------|
+| Daily Digest | Weekday 7am UTC | Fetches `/api/digest`, emails morning briefing |
+| Weekly Goals | Monday 9:30am UTC | Reads Notion goals, generates email with Claude |
+| Weekly Review | Friday 3pm UTC | Weekly review prompt email |
+| What Shipped | Friday 7am UTC | GitHub activity summary |
 
-// Good
-<Button variant="primary">Save</Button>
-<Badge variant="success">Active</Badge>
+**Note:** The digest endpoint (`/api/digest`) was removed in the v2 gut. These workflows will need updating once we rebuild the API layer.
 
-// Avoid raw Tailwind for common patterns
-<button className="px-4 py-2 bg-blue-500...">Save</button>
+## What's Coming (v2 Roadmap)
+
+1. ✅ **Context store** — structured project knowledge
+2. 🔄 **Coding agent pipeline** — Rafa picks up tasks, writes code, ships PRs
+3. 🔜 **Dashboard MVP** — project cards, activity feed, mobile-first
+4. 🔜 **Activity log API** — Rafa logs actions, Matt sees them
+5. 🔜 **Obsidian integration** — parallel frontend for deep editing
+
+See `docs/SPEC.md` for the full plan.
+
+## Commands
+
+```bash
+# Development
+cd apps/web && npm run dev     # Start dev server
+cd apps/web && npm run build   # Production build
+cd apps/web && npm run lint    # ESLint
+
+# Formatting (from root)
+npm run format                 # Prettier
+npm run format:check           # Check formatting
 ```
 
-## API Route Patterns
+## Conventions
 
-### Standard Response Format
-
-```typescript
-// Success
-return NextResponse.json({ data: result }, { status: 200 });
-
-// Error
-return NextResponse.json({ error: 'Message' }, { status: 400 });
-```
-
-### Validation Pattern
-
-```typescript
-import { createContextSchema } from '@personal-os/shared';
-
-export async function POST(request: Request) {
-  const body = await request.json();
-  const validated = createContextSchema.parse(body);
-  // ... handle validated data
-}
-```
-
-## Type System
-
-### Adding New Types
-
-1. Create schema in `packages/shared/src/types/`
-2. Export from `packages/shared/src/types/index.ts`
-3. Use Zod for validation, infer types from schemas
-
-### Example
-
-```typescript
-// packages/shared/src/types/resource.ts
-import { z } from 'zod';
-
-export const resourceSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-  created_at: z.string().datetime(),
-});
-
-export type Resource = z.infer<typeof resourceSchema>;
-
-export const createResourceSchema = resourceSchema.omit({
-  id: true,
-  created_at: true
-});
-
-export type CreateResourceInput = z.infer<typeof createResourceSchema>;
-```
-
-## Database Operations
-
-### Supabase Queries
-
-```typescript
-import { supabase } from '@/lib/supabase';
-
-// Select with filters
-const { data, error } = await supabase
-  .from('contexts')
-  .select('*')
-  .eq('active', true)
-  .single();
-
-// Insert with return
-const { data, error } = await supabase
-  .from('contexts')
-  .insert(record)
-  .select()
-  .single();
-
-// Update
-const { data, error } = await supabase
-  .from('contexts')
-  .update({ active: true })
-  .eq('id', id)
-  .select()
-  .single();
-
-// Delete
-const { error } = await supabase
-  .from('contexts')
-  .delete()
-  .eq('id', id);
-```
-
-## Environment Variables
-
-### Frontend (apps/web)
-
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-GITHUB_TOKEN=
-GITHUB_REPO_OWNER=
-GITHUB_REPO_NAME=
-GITHUB_BRANCH=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=
-```
-
-### Backend (apps/api)
-
-```
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-```
-
-## Common Tasks
-
-### Add a new page
-
-1. Create `apps/web/src/app/[route]/page.tsx`
-2. Use `PageHeader` component for consistent headers
-3. Add to navigation in `Header` if needed
-
-### Add a new API endpoint
-
-1. Create `apps/web/src/app/api/[resource]/route.ts`
-2. Add Zod schema to `packages/shared/src/types/`
-3. Export from `packages/shared/src/types/index.ts`
-4. Implement handlers (GET, POST, PUT, DELETE)
-
-### Add a new component
-
-1. Determine location:
-   - `ui/` - Reusable primitives
-   - `layout/` - Layout-related
-   - `features/[domain]/` - Feature-specific
-   - `shared/` - Utility components
-2. Use design system primitives
-3. Export from directory index if reusable
-
-### Add a new Edge Function
-
-1. Create `apps/api/functions/[name]/index.ts`
-2. Deploy: `cd apps/api && supabase functions deploy [name]`
-
-## Code Style
-
-- **Formatting**: Prettier (auto-format on save)
-- **Linting**: ESLint with TypeScript
-- **Types**: Strict TypeScript, avoid `any`
-- **Naming**:
-  - PascalCase for components
-  - camelCase for functions/variables
-  - kebab-case for file names
-
-## Project Status
-
-**Current Phase**: Phase 2 (Inbox Management)
-
-- Gmail OAuth and sync
-- Rules engine for classification
-- Approval queue UI
-- Draft reply generation
-
-**Out of Scope (V1)**:
-
-- Multi-user/team features
-- Autonomous sending (always human-in-the-loop)
-- Slack integration
-- Long-term planning features
-
-## Context Management
-
-Read context files at session start from `context/` directory.
-
-### Context File Structure
-
-```
-context/
-├── global.md              # Active projects list, cross-cutting context
-├── current-state.md       # Life events, income, key dates
-├── preferences.md         # Communication and working style
-└── projects/              # Individual project files
-    ├── personal-os.md
-    ├── state-street.md
-    ├── gm-dashboard.md
-    └── ...
-```
-
-### Loading Order
-
-1. Read `global.md` first to understand active projects
-2. Read `current-state.md` and `preferences.md` for life context
-3. Load relevant project file(s) from `projects/` based on the task
-
-### When to Update Context Files
-
-#### context/global.md
-Update when:
-- Project status changes (active → winding down → archived)
-- New project starts
-- Cross-project priorities shift
-
-#### context/current-state.md
-Update when:
-- New income stream starts or ends
-- Major life events change (house move complete, baby arrives)
-- Key dates shift significantly
-
-#### context/preferences.md
-Update when:
-- Matt explicitly corrects a behaviour ("don't do X, do Y instead")
-- A clear pattern emerges (consistently rejects certain formats)
-- New working style preferences are stated
-
-#### context/projects/*.md
-Update when:
-- New tools, repos, or resources added to project
-- Key decisions made (add to Key Decisions section)
-- Claude instructions need updating based on learnings
-- Project completes → delete the file
-
-### Update Rules
-
-- Make minimal, targeted edits
-- Don't rewrite entire files unnecessarily
-- For preferences.md, ask for confirmation before writing
-- When a project is complete, delete its file from projects/
-- Always mention what you updated and why at the end of your response
+- **Context files are markdown** — readable by humans, Obsidian, and AI agents
+- **State files get updated** — after any work on a project, update its `state.md`
+- **One project = one folder** — all context for a project lives together
+- **Runbooks are practical** — exact commands, env vars, deployment steps
+- **Architecture docs reference CLAUDE.md** — most projects have their own CLAUDE.md in their repos with deeper coding conventions

@@ -1,106 +1,13 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import {
-  CalendarSection,
-  GitHubSection,
-  FocusSection,
-  TodoistSection,
-  WeeklyGoalsSection,
-  WeeklySignalsSection,
-  DailyHabitsSection,
-  DailyOutcomesSection,
-  WorkTasksSection,
-} from '@/components/features/briefing';
-
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  return 'Good evening';
-}
-
 export default function Home() {
-  const [today, setToday] = useState('');
-  const [greeting, setGreeting] = useState('');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const now = new Date();
-    setToday(
-      now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    );
-    setGreeting(getGreeting());
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <main className="min-h-screen py-6 md:py-8 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <p className="text-primary-600 dark:text-primary-400 font-medium text-sm">
-            {greeting}
-          </p>
-          <h1 className="text-2xl md:text-3xl font-bold text-surface-900 dark:text-surface-50 tracking-tight">
-            Morning Briefing
-          </h1>
-          <p className="text-sm text-surface-500 dark:text-surface-400">{today}</p>
-        </div>
-
-        {/* Tier 1: Focus (Hero) */}
-        <section className="mb-6">
-          <FocusSection />
-        </section>
-
-        {/* Tier 2: Schedule + Weekly Goals (Twin Cards) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <CalendarSection />
-          </section>
-          <section>
-            <WeeklyGoalsSection />
-          </section>
-        </div>
-
-        {/* Tier 2.5: Daily Outcomes */}
-        <section className="mb-6">
-          <DailyOutcomesSection />
-        </section>
-
-        {/* Tier 3: Signals + Habits (Twin Cards) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <WeeklySignalsSection />
-          </section>
-          <section>
-            <DailyHabitsSection />
-          </section>
-        </div>
-
-        {/* Tier 4: Work Tasks | Life Admin */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <WorkTasksSection />
-          </section>
-          <section>
-            <TodoistSection mode="life" />
-          </section>
-        </div>
-
-        {/* Tier 5: GitHub (Needs Attention only) */}
-        <section className="mb-6">
-          <GitHubSection />
-        </section>
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-surface-900 dark:text-surface-50">
+          Personal OS v2
+        </h1>
+        <p className="mt-2 text-surface-500 dark:text-surface-400">
+          Coming soon.
+        </p>
       </div>
     </main>
   );

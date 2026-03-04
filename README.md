@@ -1,349 +1,53 @@
-# Personal OS v1
+# Personal OS v2
 
-A unified system for managing personal data and workflows, built with modern web technologies.
+Rafa's backend + Matt's dashboard. A shared data layer where the AI assistant and the human both read and write.
 
-## 🏗️ Architecture
+## What It Does
 
-Personal OS is a monorepo containing:
+- **Context Store** — structured per-project knowledge (repos, architecture, state, runbooks) for 8 projects
+- **Coding Agent Pipeline** — Rafa picks up tasks, loads project context, writes code, ships PRs *(in progress)*
+- **Dashboard** — mobile-first UI for visibility into projects and agent activity *(coming soon)*
 
-- **Frontend**: Next.js (TypeScript, App Router)
-- **Backend**: Supabase (Postgres + Edge Functions)
-- **Shared**: Common types and utilities
+## Context Store
 
-### Stack
-
-- **Frontend Framework**: Next.js 14 with App Router
-- **Language**: TypeScript (strict mode)
-- **Database**: Supabase (PostgreSQL)
-- **Serverless Functions**: Supabase Edge Functions (Deno)
-- **Code Quality**: ESLint + Prettier
-- **Package Manager**: npm workspaces
-
-## 📁 Repository Structure
+The main deliverable so far. Structured knowledge for all of Matt's projects:
 
 ```
-matt-os/
-├── apps/
-│   ├── web/              # Next.js frontend application
-│   │   ├── src/
-│   │   │   ├── app/      # App Router pages and API routes
-│   │   │   ├── components/
-│   │   │   └── lib/      # Client utilities and integrations
-│   │   ├── package.json
-│   │   └── tsconfig.json
-│   └── api/              # Supabase Edge Functions
-│       ├── functions/
-│       │   ├── health/
-│       │   ├── gmail-sync/
-│       │   └── github-sync/
-│       ├── supabase/
-│       └── package.json
-├── packages/
-│   └── shared/           # Shared types and utilities
-│       ├── src/
-│       │   ├── types/
-│       │   └── utils/
-│       └── package.json
-├── docs/                 # Documentation
-├── package.json          # Root package.json (workspace config)
-├── tsconfig.json         # Root TypeScript config
-├── .eslintrc.json        # ESLint configuration
-├── .prettierrc           # Prettier configuration
-└── .gitignore
+context/
+├── _index.md              # Project index
+├── therapist-genie/       # Teams app for therapy practices
+├── gm-dashboard/          # Venue management platform
+├── deal-committee/        # AI acquisition evaluation tool
+├── practice-interviews/   # Interview prep platform
+├── vitaboom/              # B2B supplement platform
+├── shadwell-basin/        # AI grant application tool
+├── personal-os/           # This project
+└── rafa/                  # The AI assistant
 ```
 
-## 🚀 Getting Started
+Each project has: `overview.md`, `architecture.md`, `state.md`, `runbook.md`
 
-### Prerequisites
+## Stack
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-- Supabase CLI (for local development)
+- **Next.js 14** (App Router) + **Tailwind CSS**
+- **Supabase** (Postgres)
+- **Netlify** (deployment)
 
-### Installation
-
-1. **Clone the repository**
+## Development
 
 ```bash
-git clone <repository-url>
-cd matt-os
-```
-
-2. **Install dependencies**
-
-```bash
+cd apps/web
 npm install
-```
-
-3. **Set up environment variables**
-
-Copy the example environment files and fill in your values:
-
-```bash
-# Root environment
-cp env.example .env
-
-# Web app environment
-cp apps/web/env.example apps/web/.env
-
-# API environment
-cp apps/api/env.example apps/api/.env
-```
-
-4. **Configure Supabase**
-
-If you haven't already, create a Supabase project at [supabase.com](https://supabase.com).
-
-Update your `.env` files with your Supabase credentials:
-
-- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon/public key
-- `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key (keep secret!)
-
-### Development
-
-Run all applications in development mode:
-
-```bash
+cp env.example .env.local
 npm run dev
 ```
 
-Or run individual applications:
+## Deployment
 
-```bash
-# Web app only
-cd apps/web
-npm run dev
+- **URL:** https://matt-os.netlify.app/
+- **Supabase:** `jlvfedukwgcitnwbvtpq`
 
-# Edge functions only (requires Supabase CLI)
-cd apps/api
-npm run dev
-```
+## Docs
 
-The web app will be available at `http://localhost:3000`.
-
-### Building
-
-Build all applications:
-
-```bash
-npm run build
-```
-
-### Code Quality
-
-```bash
-# Run linting
-npm run lint
-
-# Format code
-npm run format
-
-# Check formatting
-npm run format:check
-
-# Type checking
-npm run type-check
-```
-
-## ✨ Features
-
-### Phase 1: Context Management System ✅
-
-**Status**: Complete and functional
-
-The Context System provides a single source of truth for organizational contexts, replacing Notion.
-
-**Features**:
-- ✅ Full CRUD operations for contexts
-- ✅ Only one context can be active at a time
-- ✅ Contexts sync to GitHub as Markdown files
-- ✅ Clean UI for managing contexts
-- ✅ LLM-ready context formatting
-- ✅ Type-safe with Zod validation
-
-**Components**:
-- API Routes: `/api/contexts/*`
-- UI Pages: `/contexts`, `/contexts/new`, `/contexts/[slug]`
-- GitHub Integration: Syncs to `contexts/` folder in repo
-- Shared Types: `@personal-os/shared`
-
-### Phase 2: Inbox Management (Planned)
-
-- Gmail integration
-- Email classification
-- Rules engine
-- Approval queue
-- Draft replies
-
-## 🔌 Integrations
-
-### GitHub ✅ Active
-
-- **Location**: `apps/web/src/lib/integrations/github.ts`
-- **Edge Function**: `apps/api/functions/github-sync/`
-- **Purpose**: Sync context briefs as Markdown files
-- **Status**: Fully implemented
-
-### Gmail (Stub)
-
-- **Location**: `apps/web/src/lib/integrations/gmail.ts`
-- **Edge Function**: `apps/api/functions/gmail-sync/`
-- **Purpose**: Email management and synchronization
-- **Status**: Stub only, Phase 2
-
-## 🗄️ Database
-
-**Status**: Schema created and deployed to Supabase
-
-### Tables
-
-- `users` - User accounts
-- `contexts` - Organizational contexts (Phase 1 ✅)
-- `context_briefs` - Aggregated context information
-- `tasks` - Action items (Phase 2)
-- `inbox_items` - Incoming items from integrations (Phase 2)
-- `rules` - Automation rules (Phase 2)
-
-### Supabase Features
-
-- PostgreSQL database
-- Auto-generated REST API
-- Real-time subscriptions
-- Authentication (not yet configured)
-- Storage
-
-### Local Development
-
-To run Supabase locally:
-
-```bash
-# Install Supabase CLI
-npm install -g supabase
-
-# Start local Supabase
-cd apps/api
-supabase start
-
-# Stop local Supabase
-supabase stop
-```
-
-## 📝 TypeScript Configuration
-
-The project uses strict TypeScript configuration with:
-
-- `strict: true`
-- `noImplicitAny: true`
-- `strictNullChecks: true`
-- `noUnusedLocals: true`
-- `noUnusedParameters: true`
-- `noImplicitReturns: true`
-
-## 🧪 Testing
-
-Testing setup is not included in this initial scaffold. Consider adding:
-
-- Jest for unit testing
-- Playwright or Cypress for E2E testing
-- React Testing Library for component testing
-
-## 🚢 Deployment
-
-### Frontend (Next.js)
-
-Deploy to Vercel (recommended):
-
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Deploy
-cd apps/web
-vercel
-```
-
-### Backend (Edge Functions)
-
-Deploy to Supabase:
-
-```bash
-cd apps/api
-supabase functions deploy
-```
-
-## 🔐 Environment Variables
-
-See `env.example` files in each application directory for required environment variables.
-
-**Important**: Never commit `.env` files or secrets to version control.
-
-## 🤝 Contributing
-
-This is a personal project, but contributions are welcome:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run linting and type checking
-5. Submit a pull request
-
-## 📄 License
-
-Private project - All rights reserved.
-
-## 🗺️ Roadmap
-
-### Phase 1: Context System ✅
-
-- [x] Set up database schema
-- [x] Implement GitHub integration
-- [x] Build context CRUD API
-- [x] Create context UI pages
-- [x] Add LLM context loader
-- [x] GitHub sync edge function
-
-### Phase 2: Inbox Management (Next)
-
-- [ ] Implement Gmail OAuth
-- [ ] Build email ingestion
-- [ ] Create classification engine
-- [ ] Build rules engine
-- [ ] Create approval queue UI
-- [ ] Add draft reply generation
-
-### Future
-
-- [ ] Implement authentication
-- [ ] Add testing framework
-- [ ] Add CI/CD pipeline
-- [ ] Add mobile responsiveness
-
-## 📚 Additional Documentation
-
-See the `/docs` directory for additional documentation:
-
-- Architecture decisions
-- API documentation
-- Database schema
-- Integration guides
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Issue**: `Module not found` errors
-
-- Solution: Run `npm install` in the root directory
-
-**Issue**: TypeScript errors in shared package
-
-- Solution: Ensure all workspaces are installed: `npm install`
-
-**Issue**: Supabase connection errors
-
-- Solution: Check your environment variables and Supabase project status
-
-## 💬 Support
-
-For questions or issues, please open a GitHub issue.
+- `CLAUDE.md` — Full project guide for AI agents
+- `docs/SPEC.md` — v2 specification

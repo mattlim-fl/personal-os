@@ -2,10 +2,9 @@
   "name": "personal-os",
   "version": "1.0.0",
   "private": true,
-  "description": "Personal OS v1 - A unified system for managing personal data and workflows",
+  "description": "Personal OS v2 — Rafa's backend + Matt's dashboard",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "dev": "npm run dev --workspaces --if-present",
