@@ -4,22 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { Home, Layers, Settings, Menu, Sun, Moon, BarChart3, Sparkles, Newspaper } from 'lucide-react';
+import { Home, Menu, Sun, Moon, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'Contexts', href: '/contexts', icon: Layers },
   { name: 'Newsletters', href: '/newsletters', icon: Newspaper },
-  { name: 'Deal Committee', href: '/deal-committee', icon: BarChart3 },
-  { name: 'Hg Interview', href: '/interview/hg-capital', icon: Sparkles },
-  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export function Header() {
   const pathname = usePathname();
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -55,7 +51,7 @@ export function Header() {
               {navigation.map((item) => {
                 const isActive =
                   pathname === item.href ||
-                  (item.href !== '/' && pathname.startsWith(item.href));
+                  (item.href !== '/' && pathname?.startsWith(item.href));
                 const Icon = item.icon;
 
                 return (
