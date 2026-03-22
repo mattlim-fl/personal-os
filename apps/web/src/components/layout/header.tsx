@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Home, Menu, Sun, Moon, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
@@ -111,7 +111,7 @@ export function Header() {
       {/* Mobile Navigation */}
       <MobileNav
         open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
+        onClose={useCallback(() => setMobileMenuOpen(false), [])}
       />
     </>
   );
