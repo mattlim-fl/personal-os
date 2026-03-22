@@ -1,0 +1,51 @@
+# Personal OS — Cursor Rules
+
+## System Context
+
+Single-user life dashboard. Next.js 14 (App Router) on Netlify, Supabase PostgreSQL. No auth. Content written by AI assistant (Rafa) via API routes.
+
+Monorepo: `apps/web/` (Next.js) + `packages/shared/` (Zod types, utils).
+
+## Adding Features
+
+Every feature follows a 7-step pattern. See `docs/adding-a-new-feature.md` for the full walkthrough. The newsletter feature is the canonical reference.
+
+Steps: Supabase table → Zod types in `packages/shared/src/types/` → API route → page → feature components → briefing widget → nav links (header.tsx + mobile-nav.tsx).
+
+## Key Patterns
+
+- **API responses**: Always include `timestamp: new Date().toISOString()` in every response.
+- **POST routes**: Accept single item or array: `Array.isArray(body) ? body : [body]`.
+- **Client-side fetching**: All feature components use `'use client'` + `useEffect` → `fetch('/api/...')`.
+- **Types**: Import from `@personal-os/shared`. Zod schemas in `packages/shared/src/types/`. Export from barrel `index.ts`.
+- **UI primitives**: Use `Button`, `Card`, `Badge`, `Input`, `Select`, `Skeleton`, `Alert`, `Toast` from `@/components/ui`. Use `cn()` from `@/lib/utils`.
+- **State handling**: Every list needs loading (Skeleton), error, and empty (EmptyState) states.
+- **Navigation**: Duplicated in `header.tsx` and `mobile-nav.tsx` — update both.
+
+## Gotchas
+
+- **No auth** — Intentional. Don't add authentication.
+- **Single production DB** — No staging. No migration tool. Tables created via SQL in Supabase dashboard.
+- **Tailwind v4** — Uses `@tailwindcss/postcss`, not classic plugin. Surface-* color tokens.
+- **Supabase client** — Proxy pattern in `lib/supabase.ts`. Import directly, don't await.
+- **Components ≤ 150 lines** — Split if larger.
+- **Deploy** — Netlify auto-deploys on merge to `main`.
+
+## Code Style
+
+- PascalCase components, camelCase functions/variables, kebab-case files
+- Strict TypeScript — avoid `any`
+- Don't create new base UI components — use existing `@/components/ui`
+- Prefer existing shared utilities over creating new ones
+
+## Workflow
+
+- Feature branch → PR → squash merge to `main`
+- Run `npm run type-check && npm run lint` before pushing
+
+## Reference Files
+
+- `packages/shared/src/types/newsletter.ts` — Zod schema pattern
+- `apps/web/src/app/api/newsletters/route.ts` — API route pattern
+- `apps/web/src/components/features/newsletters/newsletter-list.tsx` — List component pattern
+- `apps/web/src/components/features/briefing/newsletter-section.tsx` — Briefing widget pattern

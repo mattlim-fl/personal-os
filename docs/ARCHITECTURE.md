@@ -1,211 +1,114 @@
-# Architecture Overview
+# Architecture
 
-## System Design
+## System Overview
 
-Personal OS v1 follows a modern, serverless architecture with clear separation of concerns.
+Personal OS is a single-user life dashboard deployed as a Next.js 14 application on Netlify, backed by Supabase PostgreSQL. It serves as Matt's personal context management system — replacing Notion with a unified, API-driven platform where an AI assistant (Rafa) writes content via API routes.
 
-## High-Level Architecture
+The system follows a simple three-layer pattern: **Next.js App Router** handles both the UI and API layer, **Supabase** provides persistence, and a **shared package** holds types and utilities used across both layers. There is no authentication — this is a single-user system.
+
+## Component Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         Client Layer                         │
-│                    (Next.js App Router)                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   UI Pages   │  │  Components  │  │  API Routes  │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-└─────────────────────────────────────────────────────────────┘
-                            │
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                      Supabase Layer                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   Postgres   │  │ Edge Functions│  │     Auth     │     │
-│  │   Database   │  │   (Deno)      │  │              │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-└─────────────────────────────────────────────────────────────┘
-                            │
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                   External Integrations                      │
-│  ┌──────────────┐  ┌──────────────┐                        │
-│  │    Gmail     │  │   GitHub     │                        │
-│  │     API      │  │     API      │                        │
-│  └──────────────┘  └──────────────┘                        │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│                  Next.js 14                       │
+│               (apps/web on Netlify)               │
+│                                                   │
+│  ┌─────────────┐    ┌──────────────────────────┐ │
+│  │  App Router  │    │      API Routes          │ │
+│  │  Pages/UI    │───>│  /api/newsletters/...    │ │
+│  │              │    │  /api/[future]/...       │ │
+│  └─────────────┘    └────────────┬─────────────┘ │
+└──────────────────────────────────┼───────────────┘
+                                   │
+          ┌────────────────────────┼────────────────┐
+          │                        ▼                 │
+          │  ┌──────────────────────────────────┐   │
+          │  │  Supabase PostgreSQL              │   │
+          │  │  (newsletter_items, future tables) │   │
+          │  └──────────────────────────────────┘   │
+          │                                         │
+          │          Supabase (hosted)               │
+          └─────────────────────────────────────────┘
+
+External writers:
+  Rafa (AI assistant) ──POST──> /api/newsletters
+  Future integrations  ──POST──> /api/[resource]
 ```
-
-## Components
-
-### Frontend (`apps/web`)
-
-**Technology**: Next.js 14 with App Router
-
-**Responsibilities**:
-
-- User interface rendering
-- Client-side state management
-- API route handlers
-- Integration with Supabase client
-
-**Key Directories**:
-
-- `src/app/`: App Router pages and layouts
-- `src/components/`: Reusable React components
-- `src/lib/`: Client utilities and service integrations
-
-### Backend (`apps/api`)
-
-**Technology**: Supabase Edge Functions (Deno runtime)
-
-**Responsibilities**:
-
-- Serverless function execution
-- Background job processing
-- Integration synchronization
-- Business logic execution
-
-**Key Directories**:
-
-- `functions/`: Individual edge functions
-- `supabase/`: Supabase configuration
-
-### Shared (`packages/shared`)
-
-**Technology**: TypeScript
-
-**Responsibilities**:
-
-- Shared type definitions
-- Common utilities
-- Constants and enums
-
-**Key Directories**:
-
-- `src/types/`: TypeScript type definitions
-- `src/utils/`: Utility functions
 
 ## Data Flow
 
-### Client → Server
+### Reading data (UI)
+1. Page component renders, client component mounts
+2. `useEffect` calls `fetch('/api/[resource]?...')`
+3. API route queries Supabase via singleton client (`lib/supabase.ts`)
+4. Response returned as `{ data, count, timestamp }`
+5. Component renders data with loading/error/empty states
 
-1. User interacts with Next.js UI
-2. Client makes request to Next.js API route or Supabase directly
-3. API route/Edge function processes request
-4. Database query executed
-5. Response returned to client
+### Writing data (Rafa / external)
+1. POST request hits `/api/[resource]` with JSON body (single item or array)
+2. API route validates with Zod schema from `@personal-os/shared`
+3. Validated data inserted into Supabase
+4. Response returned with created records
 
-### Background Sync
+### Home page briefing
+The home page (`/`) renders briefing widgets — small card sections showing the latest items from each feature. Each widget fetches independently with a limited query (e.g., `?limit=5`).
 
-1. Edge function triggered (cron or webhook)
-2. Function authenticates with external service
-3. Data fetched from external API
-4. Data transformed and validated
-5. Data stored in Supabase
-6. Client notified via real-time subscription (future)
+## Data Model
 
-## Security Model
+### Current Entities
 
-### Authentication
+**newsletter_items** — Curated newsletter digests written by Rafa
+- `id` (uuid, PK), `source`, `title`, `summary`, `url` (nullable), `tags` (text[]), `published_at` (nullable), `digest_date` (date string YYYY-MM-DD), `created_at`
 
-- Supabase Auth handles user authentication
-- JWT tokens for API authorization
-- Row Level Security (RLS) on database tables
+### Schema Location
+- Zod schemas: `packages/shared/src/types/` (source of truth for validation)
+- Supabase tables: Created via SQL directly (no migration tool)
+- Common response types: `packages/shared/src/types/common.ts`
 
-### API Security
+## Module Boundaries
 
-- Environment variables for secrets
-- Service role key only in Edge Functions
-- Anon key for client-side operations
-- CORS configuration for API routes
+| Directory | Owns | Does NOT own |
+|-----------|------|-------------|
+| `apps/web/src/app/api/` | HTTP handling, request validation, Supabase queries | UI rendering |
+| `apps/web/src/app/[route]/` | Page layout, composing feature components | Data fetching logic |
+| `apps/web/src/components/ui/` | Design system primitives (Button, Card, Badge, etc.) | Business logic, data fetching |
+| `apps/web/src/components/features/[domain]/` | Feature-specific UI + client-side data fetching | Cross-feature concerns |
+| `apps/web/src/components/features/briefing/` | Home page widgets (one per feature) | Full-page feature views |
+| `apps/web/src/components/layout/` | Header, nav, page chrome | Feature content |
+| `apps/web/src/components/shared/` | Reusable utility components (EmptyState, LoadingState, ErrorState) | Feature-specific logic |
+| `apps/web/src/lib/` | Supabase client, utilities (`cn()`), constants | UI components |
+| `packages/shared/src/types/` | Zod schemas, TypeScript types, API response interfaces | Runtime logic |
+| `packages/shared/src/utils/` | Pure utility functions (date, validation, week) | Side effects |
 
-### Data Security
+## Key Architectural Decisions
 
-- Encrypted at rest (Supabase)
-- Encrypted in transit (HTTPS)
-- Row Level Security policies
-- Input validation and sanitization
+### No authentication
+Single-user personal system. No auth middleware, no session management. API routes are open. This is intentional — don't add auth.
 
-## Scalability Considerations
+### AI as CMS
+Content is written by Rafa (AI assistant) via POST to API routes. There is no admin UI for content creation. The API IS the CMS interface.
 
-### Current State (v1)
+### Monorepo with npm workspaces
+`apps/web` + `packages/shared`. Shared types ensure the API route validation and frontend type expectations stay in sync. Import shared types as `@personal-os/shared`.
 
-- Serverless architecture (auto-scaling)
-- Managed database (Supabase)
-- No caching layer
-- Synchronous operations
+### Client-side data fetching
+Feature components are `'use client'` and fetch data via `useEffect` → `fetch('/api/...')`. No server components for data fetching currently. This keeps the pattern simple and consistent.
 
-### Future Improvements
+### Single production database
+No staging environment. Supabase project is production. Tables created via SQL. Be careful with destructive migrations.
 
-- Implement caching (Redis)
-- Add message queue for async operations
-- Implement rate limiting
-- Add CDN for static assets
-- Database read replicas
+## Environment & Configuration
 
-## Technology Choices
+| Variable | Purpose | Where used |
+|----------|---------|-----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Client (via `lib/supabase.ts`) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | Client (via `lib/supabase.ts`) |
 
-### Why Next.js?
+Additional env vars exist for Gmail/GitHub integrations (future features) — see `apps/web/env.example`.
 
-- Modern React framework
-- Built-in API routes
-- Excellent TypeScript support
-- Optimized for production
-- Great developer experience
+## Deployment
 
-### Why Supabase?
-
-- Open-source Firebase alternative
-- PostgreSQL (powerful, reliable)
-- Built-in authentication
-- Real-time capabilities
-- Edge Functions (serverless)
-- Generous free tier
-
-### Why TypeScript?
-
-- Type safety
-- Better IDE support
-- Catch errors at compile time
-- Self-documenting code
-- Easier refactoring
-
-### Why Monorepo?
-
-- Code sharing (types, utils)
-- Consistent tooling
-- Atomic commits
-- Easier dependency management
-
-## Development Workflow
-
-1. **Local Development**
-   - Run Next.js dev server
-   - Run Supabase locally (optional)
-   - Use environment variables for config
-
-2. **Code Quality**
-   - TypeScript strict mode
-   - ESLint for code quality
-   - Prettier for formatting
-
-3. **Deployment**
-   - Frontend: Vercel (recommended)
-   - Backend: Supabase Edge Functions
-   - Database: Supabase (managed)
-
-## Future Architecture Considerations
-
-### Phase 2 Additions
-
-- Real-time data synchronization
-- Offline-first capabilities
-- Mobile app (React Native)
-- Advanced analytics
-- AI/ML integrations
-
-### Potential Migrations
-
-- Microservices architecture (if needed)
-- GraphQL API layer
-- Event-driven architecture
-- CQRS pattern for complex domains
+- **Frontend**: Netlify, auto-deploys on merge to `main`
+- **Database**: Supabase (hosted PostgreSQL)
+- No edge functions currently deployed
+- No CI pipeline — lint and type-check run locally
