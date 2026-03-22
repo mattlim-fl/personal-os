@@ -11,6 +11,7 @@ import {
   DailyHabitsSection,
   DailyOutcomesSection,
   WorkTasksSection,
+  NewsletterSection,
 } from '@/components/features/briefing';
 
 function getGreeting() {
@@ -86,6 +87,11 @@ export default function Home() {
             <DailyHabitsSection />
           </section>
         </div>
+
+        {/* Tier 3.5: Newsletters */}
+        <section className="mb-6">
+          <NewsletterSection />
+        </section>
 
         {/* Tier 4: Work Tasks | Life Admin */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
