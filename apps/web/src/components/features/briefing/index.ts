@@ -10,3 +10,4 @@ export { WeeklySignalsSection } from './weekly-signals-section';
 export { DailyHabitsSection } from './daily-habits-section';
 export { DailyOutcomesSection } from './daily-outcomes-section';
 export { WorkTasksSection } from './work-tasks-section';
+export { NewsletterSection } from './newsletter-section';

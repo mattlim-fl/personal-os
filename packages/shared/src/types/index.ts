@@ -11,3 +11,4 @@ export * from './goals';
 export * from './todoist';
 export * from './work-tasks';
 export * from './context-files';
+export * from './newsletter';
