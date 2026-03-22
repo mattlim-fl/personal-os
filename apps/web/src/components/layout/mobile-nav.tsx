@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { X, Home, Newspaper } from 'lucide-react';
+import { X, Home, Newspaper, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MobileNavProps {
@@ -14,6 +14,7 @@ interface MobileNavProps {
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Newsletters', href: '/newsletters', icon: Newspaper },
+  { name: 'Agent', href: '/agent', icon: Bot },
 ];
 
 export function MobileNav({ open, onClose }: MobileNavProps) {
