@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useCallback } from 'react';
-import { Home, Menu, Sun, Moon, Newspaper } from 'lucide-react';
+import { Home, Menu, Sun, Moon, Newspaper, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Newsletters', href: '/newsletters', icon: Newspaper },
+  { name: 'Agent', href: '/agent', icon: Bot },
 ];
 
 export function Header() {
