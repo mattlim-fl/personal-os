@@ -33,3 +33,9 @@ Known gotchas, tribal knowledge, and things that have bitten us. Add to this fil
 - **PR target is always `main`.** There is no `dev` or `staging` branch. Feature branch → PR → squash merge to `main` → Netlify auto-deploys.
 
 - **Netlify deploys on merge.** No CI pipeline runs before deploy. The only safety net is running `npm run type-check && npm run lint` locally before pushing.
+
+- **Visually verify before merging.** Start dev server, open in browser, screenshot desktop AND mobile (390×844), test interactive elements. Don't merge frontend PRs you haven't looked at.
+
+## React Gotchas
+
+- **Memoize callbacks passed to child useEffects.** If a parent passes `() => setState(false)` as a prop and the child has a `useEffect([thatProp])`, the effect fires every render because the function reference changes. Use `useCallback`. This broke the mobile nav drawer (opened then immediately closed).
