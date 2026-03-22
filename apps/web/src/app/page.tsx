@@ -1,18 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  CalendarSection,
-  GitHubSection,
-  FocusSection,
-  TodoistSection,
-  WeeklyGoalsSection,
-  WeeklySignalsSection,
-  DailyHabitsSection,
-  DailyOutcomesSection,
-  WorkTasksSection,
-  NewsletterSection,
-} from '@/components/features/briefing';
+import { NewsletterSection } from '@/components/features/briefing';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -53,59 +42,14 @@ export default function Home() {
             {greeting}
           </p>
           <h1 className="text-2xl md:text-3xl font-bold text-surface-900 dark:text-surface-50 tracking-tight">
-            Morning Briefing
+            Personal OS
           </h1>
           <p className="text-sm text-surface-500 dark:text-surface-400">{today}</p>
         </div>
 
-        {/* Tier 1: Focus (Hero) */}
-        <section className="mb-6">
-          <FocusSection />
-        </section>
-
-        {/* Tier 2: Schedule + Weekly Goals (Twin Cards) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <CalendarSection />
-          </section>
-          <section>
-            <WeeklyGoalsSection />
-          </section>
-        </div>
-
-        {/* Tier 2.5: Daily Outcomes */}
-        <section className="mb-6">
-          <DailyOutcomesSection />
-        </section>
-
-        {/* Tier 3: Signals + Habits (Twin Cards) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <WeeklySignalsSection />
-          </section>
-          <section>
-            <DailyHabitsSection />
-          </section>
-        </div>
-
-        {/* Tier 3.5: Newsletters */}
+        {/* Newsletters */}
         <section className="mb-6">
           <NewsletterSection />
-        </section>
-
-        {/* Tier 4: Work Tasks | Life Admin */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <section>
-            <WorkTasksSection />
-          </section>
-          <section>
-            <TodoistSection mode="life" />
-          </section>
-        </div>
-
-        {/* Tier 5: GitHub (Needs Attention only) */}
-        <section className="mb-6">
-          <GitHubSection />
         </section>
       </div>
     </main>
